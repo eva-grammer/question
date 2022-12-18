@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="Description" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css" />
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <style>
+      li span,
+      li button {
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      window.$docsify = {
+        name: "",
+        repo: "",
+        loadSidebar: true,
+        auto2top: true,
+        autoHeader: true,
+      };
+    </script>
+    <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+    <script>
+      function randomSort(a, b) {
+        return Math.random() > 0.5 ? -1 : 1;
+      }
+      function shuffle(array) {
+        array.sort(randomSort);
+      }
+      function createQuestion(data) {
+        generatorTest();
+        var article = document.getElementsByTagName("article")[0];
+
+        var ol = document.createElement("ol");
+        data.forEach((oneQuestion) => {
+          var question = createOneQuestion(oneQuestion);
+          ol.appendChild(question);
+        });
+
+        article.appendChild(ol);
+      }
+      function createOneQuestion(d) {
+        var li = document.createElement("li");
+
+        var ul = document.createElement("ul");
+        li.appendChild(ul);
+        var li_title = document.createElement("li");
+        li_title.textContent = d.title;
+        var btn_reset = document.createElement("button");
+        btn_reset.textContent = "reset";
+        btn_reset.onclick = function () {
+          for (
+            let index = li_Question.childElementCount - 1;
+            index >= 0;
+            index--
+          ) {
+            const element = li_Question.children[index];
+            element.remove();
+          }
+          for (let index = 0; index < li_words.childElementCount; index++) {
+            const element = li_words.children[index];
+            element.oldValue = undefined;
+          }
+        };
+        li_title.appendChild(btn_reset);
+
+        var li_Question = document.createElement("li");
+
+        var li_words = document.createElement("li");
+        var li_result = document.createElement("li");
+        d.words.forEach((word) => {
+          var button = document.createElement("button");
+          button.innerText = word;
+          button.onclick = function () {
+            var currentAudio = new Audio(
+              "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav"
+            );
+            currentAudio.play();
+            var li_input = document.createElement("input");
+
+            if (button.oldValue === undefined) {
+              var li_word = document.createElement("span");
+              li_word.textContent = word;
+              li_word.id = guid();
+              button.oldValue = word;
+              button.relationId = li_word.id;
+              li_Question.appendChild(li_word);
+            } else {
+              button.oldValue = undefined;
+              document.getElementById(button.relationId).remove();
+            }
+
+            check(d, li_Question, li_result);
+          };
+          li_words.appendChild(button);
+        });
+        ul.appendChild(li_title);
+
+        ul.appendChild(li_words);
+        ul.appendChild(li_Question);
+        ul.appendChild(li_result);
+        return li;
+      }
+
+      function check(question, resultElements, li_result) {
+        if (question.words.length !== resultElements.childElementCount) {
+          li_result.textContent = "";
+          return;
+        }
+        var test = undefined;
+        for (let index = 0; index < resultElements.childElementCount; index++) {
+          const element = resultElements.children[index];
+
+          if (test == undefined) {
+            test = element.innerText;
+          } else {
+            test += " " + element.innerText;
+          }
+        }
+        var isSuccess = test == question.answer;
+        if (isSuccess) {
+          li_result.textContent = "正确";
+          var currentAudio = new Audio(
+            "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
+          );
+          currentAudio.play();
+        } else {
+          li_result.textContent = "错误";
+          var currentAudio = new Audio(
+            "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav"
+          );
+          currentAudio.play();
+        }
+      }
+      function guid() {
+        function S4() {
+          return (((1 + Math.random()) * 0x10000) | 0)
+            .toString(16)
+            .substring(1);
+        }
+        return (
+          S4() +
+          S4() +
+          "-" +
+          S4() +
+          "-" +
+          S4() +
+          "-" +
+          S4() +
+          "-" +
+          S4() +
+          S4() +
+          S4()
+        );
+      }
+
+      onmousedown = function (event) {
+        if (event.srcElement.tagName != "A") {
+          return;
+        }
+        var url = event.srcElement.href;
+        var innerText = event.srcElement.innerText;
+        if (innerText == "生成题库") {
+          event.preventDefault();
+          event.srcElement.remove();
+          $.getJSON(url, function (result) {
+            result.forEach((d) => {
+              var words = d.answer.split(/\s/);
+              shuffle(words);
+              d.words = words;
+            });
+            createQuestion(result);
+          });
+          return false;
+        }
+      };
+    </script>
+  </body>
+</html>

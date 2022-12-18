@@ -168,7 +168,7 @@
         if (event.srcElement.tagName != "A") {
           return;
         }
-        var url = event.srcElement.href;
+        var url = event.srcElement.href.replace("/#/./","/");
         var innerText = event.srcElement.innerText;
         if (innerText == "生成题库") {
           event.preventDefault();

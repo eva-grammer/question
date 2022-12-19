@@ -155,6 +155,13 @@
         if (isSuccess) {
           li_result.textContent = "正确";
           successAudio().play();
+          setTimeout(() => {
+            var href =
+              "https://dict.youdao.com/dictvoice?audio=" +
+              question.originalWords.join("+") +
+              "&le=eng&le=eng&type=2";
+            new Audio(href).play();
+          }, 1000);
         } else {
           li_result.textContent = "错误";
 

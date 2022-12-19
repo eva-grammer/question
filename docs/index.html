@@ -232,6 +232,7 @@
           event.srcElement.remove();
           $.getJSON(url, function (result) {
             result.forEach((d) => {
+              d.answer = d.answer.trim();
               var words = d.answer.split(/\s/);
               words = removeEmpty(words);
               words.sort(randomSort);

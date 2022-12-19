@@ -182,7 +182,7 @@
           currentAudio.pause();
         }
       }
-      function playOne(element, callBack) {
+      function playOne(element) {
         startPlay(element);
         let url = element.href;
         currentAudio = new Audio(url);
@@ -208,7 +208,7 @@
             e.preventDefault();
             return false;
           };
-          startPlay(event.srcElement);
+          playOne(event.srcElement);
           return false;
         }
         if (innerText == "停止") {

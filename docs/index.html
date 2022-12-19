@@ -204,10 +204,18 @@
         event.preventDefault();
         var innerText = event.srcElement.innerText;
         if (innerText == "播放") {
+          event.srcElement.onclick = function (e) {
+            e.preventDefault();
+            return false;
+          };
           startPlay(event.srcElement);
           return false;
         }
         if (innerText == "停止") {
+          event.srcElement.onclick = function (e) {
+            e.preventDefault();
+            return false;
+          };
           stopPlay(lastElement);
           return false;
         }

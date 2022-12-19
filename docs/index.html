@@ -33,9 +33,11 @@
     <script>
       let currentAudio = null;
       let lastElement = null;
-      var clickAudio = new Audio(
-        "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav"
-      );
+      var clickAudio = function () {
+        return new Audio(
+          "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav"
+        );
+      };
       var successAudio = new Audio(
         "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
       );
@@ -104,7 +106,7 @@
           var button = document.createElement("button");
           button.innerText = word;
           button.onclick = function () {
-            setTimeout(() => clickAudio.play(), 0);
+            clickAudio().play();
 
             if (button.oldValue === undefined) {
               var li_word = document.createElement("span");

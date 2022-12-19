@@ -104,7 +104,8 @@
           var button = document.createElement("button");
           button.innerText = word;
           button.onclick = function () {
-            clickAudio.play();
+            setTimeout(() => clickAudio.play(), 0);
+
             if (button.oldValue === undefined) {
               var li_word = document.createElement("span");
               li_word.textContent = word;

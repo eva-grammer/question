@@ -45,8 +45,14 @@
       function randomSort(a, b) {
         return Math.random() > 0.5 ? -1 : 1;
       }
-      function shuffle(array) {
-        array.sort(randomSort);
+      function removeEmpty(array) {
+        var newArray = [];
+        array.forEach((v) => {
+          if (v) {
+            newArray.push(v);
+          }
+        });
+        return newArray;
       }
       function createQuestion(data) {
         var article = document.getElementsByTagName("article")[0];
@@ -227,9 +233,11 @@
           $.getJSON(url, function (result) {
             result.forEach((d) => {
               var words = d.answer.split(/\s/);
-              shuffle(words);
+              words = shuffle(words);
+              words.sort(randomSort);
               d.words = words;
               d.originalWords = d.answer.split(/\s/);
+              d.originalWords = removeEmpty(d.originalWords);
             });
             createQuestion(result);
           });

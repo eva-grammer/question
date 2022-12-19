@@ -233,7 +233,7 @@
           $.getJSON(url, function (result) {
             result.forEach((d) => {
               var words = d.answer.split(/\s/);
-              words = shuffle(words);
+              words = removeEmpty(words);
               words.sort(randomSort);
               d.words = words;
               d.originalWords = d.answer.split(/\s/);

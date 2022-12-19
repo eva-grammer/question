@@ -38,12 +38,14 @@
           "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav"
         );
       };
-      var successAudio = new Audio(
-        "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
-      );
-      var failAudio = new Audio(
-        "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav"
-      );
+      var successAudio = () =>
+        new Audio(
+          "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
+        );
+      var failAudio = () =>
+        new Audio(
+          "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav"
+        );
       function randomSort(a, b) {
         return Math.random() > 0.5 ? -1 : 1;
       }
@@ -111,9 +113,11 @@
             if (button.oldValue === undefined) {
               var li_word = document.createElement("span");
               li_word.textContent = word;
-              li_word.id = guid();
+              if (!button.relationId) {
+                button.relationId = guid();
+              }
+              li_word.id = button.relationId;
               button.oldValue = word;
-              button.relationId = li_word.id;
               li_Question.appendChild(li_word);
             } else {
               button.oldValue = undefined;
@@ -150,11 +154,11 @@
         var isSuccess = test == question.answer;
         if (isSuccess) {
           li_result.textContent = "正确";
-          successAudio.play();
+          successAudio().play();
         } else {
           li_result.textContent = "错误";
 
-          failAudio.play();
+          failAudio().play();
         }
       }
       function guid() {

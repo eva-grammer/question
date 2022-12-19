@@ -31,13 +31,24 @@
     </script>
     <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
     <script>
+      let currentAudio = null;
+      let lastElement = null;
+      var clickAudio = new Audio(
+        "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav"
+      );
+      var successAudio = new Audio(
+        "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
+      );
+      var failAudio = new Audio(
+        "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav"
+      );
       function randomSort(a, b) {
         return Math.random() > 0.5 ? -1 : 1;
       }
       function shuffle(array) {
         array.sort(randomSort);
       }
-      function createQuestion(data) { 
+      function createQuestion(data) {
         var article = document.getElementsByTagName("article")[0];
 
         var ol = document.createElement("ol");
@@ -56,7 +67,7 @@
         var li_title = document.createElement("li");
         li_title.textContent = d.title;
         var btn_reset = document.createElement("button");
-        btn_reset.textContent = "reset";
+        btn_reset.textContent = "重置";
         btn_reset.onclick = function () {
           for (
             let index = li_Question.childElementCount - 1;
@@ -72,7 +83,13 @@
           }
         };
         li_title.appendChild(btn_reset);
-
+        var link_play = document.createElement("a");
+        link_play.textContent = "播放";
+        link_play.href =
+          "https://dict.youdao.com/dictvoice?audio=" +
+          d.originalWords.join("+") +
+          "&le=eng&le=eng&type=2";
+        li_title.appendChild(link_play);
         var li_Question = document.createElement("li");
 
         var li_words = document.createElement("li");
@@ -81,12 +98,7 @@
           var button = document.createElement("button");
           button.innerText = word;
           button.onclick = function () {
-            var currentAudio = new Audio(
-              "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav"
-            );
-            currentAudio.play();
-            var li_input = document.createElement("input");
-
+            clickAudio.play();
             if (button.oldValue === undefined) {
               var li_word = document.createElement("span");
               li_word.textContent = word;
@@ -129,16 +141,11 @@
         var isSuccess = test == question.answer;
         if (isSuccess) {
           li_result.textContent = "正确";
-          var currentAudio = new Audio(
-            "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
-          );
-          currentAudio.play();
+          successAudio.play();
         } else {
           li_result.textContent = "错误";
-          var currentAudio = new Audio(
-            "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav"
-          );
-          currentAudio.play();
+
+          failAudio.play();
         }
       }
       function guid() {
@@ -162,13 +169,50 @@
           S4()
         );
       }
+      function startPlay(element) {
+        stopPlay();
+        lastElement = element;
+        element.oldText = element.innerText;
+        element.innerText = "停止";
+      }
+      function stopPlay() {
+        if (!lastElement) return;
+        lastElement.innerText = lastElement.oldText;
+        if (currentAudio != null) {
+          currentAudio.pause();
+        }
+      }
+      function playOne(element, callBack) {
+        startPlay(element);
+        let url = element.href;
+        currentAudio = new Audio(url);
+        currentAudio.onended = function () {
+          setTimeout((v) => currentAudio.play(), 500);
+        };
+        try {
+          currentAudio.play();
+        } catch (e) {
+          console.error(e);
 
+          stopPlay();
+        }
+      }
       onmousedown = function (event) {
         if (event.srcElement.tagName != "A") {
           return;
         }
-        var url = event.srcElement.href.replace("/#/./","/");
+        event.preventDefault();
         var innerText = event.srcElement.innerText;
+        if (innerText == "播放") {
+          startPlay(event.srcElement);
+          return false;
+        }
+        if (innerText == "停止") {
+          stopPlay(lastElement);
+          return false;
+        }
+        var url = event.srcElement.href.replace("/#/./", "/");
+
         if (innerText == "生成题库") {
           event.preventDefault();
           event.srcElement.remove();
@@ -177,6 +221,7 @@
               var words = d.answer.split(/\s/);
               shuffle(words);
               d.words = words;
+              d.originalWords = d.answer.split(/\s/);
             });
             createQuestion(result);
           });

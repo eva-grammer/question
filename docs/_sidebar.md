@@ -60,18 +60,3 @@
     *   第五十七节[被动语态](./第五十七节.md)
     *   第五十八节[关系代词的用法](./第五十八节.md)
     *   第五十九节[动名词的用法](./第五十九节.md)
-***
-
-**以下是《老外每天都在用到的286个英语关键句型（第二版）》**
-
-*   **Unit1 There be句型**
-
-    1.  Lesson 1　[There be……有……](./sentence/lesson1.md)
-    2.  Lesson 2　[There be……有……](./sentence/lesson2.md)
-    3.  
-*   **Unit2 比较句型**
-*   
-    1.  Lesson 1　[There be……有……](./sentence/lesson1.md)
-    2.  Lesson 2　[There be……有……](./sentence/lesson2.md)  
-*
-*

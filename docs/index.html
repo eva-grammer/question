@@ -10,7 +10,7 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css" />
-    <script src="./question/jquery.min.js"></script>
+    <script src="./sentence/jquery.min.js"></script>
     <style>
       li span,
       li button {
@@ -18,6 +18,9 @@
       }
       li {
         word-break: break-word;
+      }
+      .select {
+        background-color: rgb(241 232 228);
       }
     </style>
   </head>
@@ -63,15 +66,32 @@
       }
       function createQuestion(data) {
         var article = document.getElementsByTagName("article")[0];
-
+        var h1 = document.createElement("h4");
+        h1.innerText = "句型练习";
         var ol = document.createElement("ol");
         data.forEach((oneQuestion) => {
           var question = createOneQuestion(oneQuestion);
           ol.appendChild(question);
         });
 
+        article.appendChild(h1);
         article.appendChild(ol);
       }
+
+      function createDialog(data) {
+        var article = document.getElementsByTagName("article")[0];
+        var h1 = document.createElement("h4");
+        h1.innerText = "对话练习";
+        var ol = document.createElement("ol");
+        data.forEach((oneDialog) => {
+          var question = createOneDialog(oneDialog);
+          ol.appendChild(question);
+        });
+
+        article.appendChild(h1);
+        article.appendChild(ol);
+      }
+
       function createOneQuestion(d) {
         var li = document.createElement("li");
 
@@ -79,9 +99,127 @@
         li.appendChild(ul);
         var li_title = document.createElement("li");
         li_title.textContent = d.title;
+        var li_Question = document.createElement("li");
+        var li_words = document.createElement("li");
+        createResetButton(li_title, li_Question, li_words);
+        createPlayLink(li_title, d.originalWords);
+        var link_play = document.createElement("a");
+        var li_words = document.createElement("li");
+        var li_result = document.createElement("li");
+        createWordButton(
+          d.words,
+          d.answer,
+          d.originalWords,
+          li_words,
+          li_Question,
+          li_result
+        );
+        ul.appendChild(li_title);
+        ul.appendChild(li_words);
+        ul.appendChild(li_Question);
+        ul.appendChild(li_result);
+        return li;
+      }
+      function createOneDialog(d) {
+        var li = document.createElement("li");
+
+        var ul = document.createElement("ul");
+        li.appendChild(ul);
+
+        d.title.forEach((title) => {
+          var li_title1 = document.createElement("li");
+          li_title1.textContent = title;
+          ul.appendChild(li_title1);
+        });
+        d.answer.forEach((answer) => {
+          let li_words = document.createElement("li");
+          let li_Question = document.createElement("li");
+          let li_action = document.createElement("li");
+          var li_result = document.createElement("li");
+          createWordButton(
+            answer.words,
+            answer.en,
+            answer.originalWords,
+            li_words,
+            li_Question,
+            li_result
+          );
+
+          createResetButton(li_action, li_Question, li_words);
+          createPlayLink(li_action, answer.originalWords);
+          ul.appendChild(li_words);
+          ul.appendChild(li_Question);
+          ul.appendChild(li_action);
+
+          ul.appendChild(li_result);
+        });
+
+        return li;
+      }
+
+      function createWordButton(
+        words,
+        answer,
+        originalWords,
+        parent,
+        li_Question,
+        li_result
+      ) {
+        words.forEach((word) => {
+          var button = document.createElement("button");
+          button.innerText = word;
+          button.onclick = function () {
+            clickAudio().play();
+            if (li_Question.childElementCount == 0) {
+              li_Question.lastButtons = [];
+            }
+            if (button.oldValue === undefined) {
+              var li_word = document.createElement("span");
+              li_word.textContent = word;
+              if (!button.relationId) {
+                button.relationId = guid();
+              }
+              li_word.id = button.relationId;
+              button.oldValue = word;
+              button.className = "select";
+              li_Question.lastButtons.push(button);
+              li_Question.appendChild(li_word);
+            } else {
+              var lastButton =
+                li_Question.lastButtons[li_Question.lastButtons.length - 1];
+              if (lastButton == button) {
+                li_Question.lastButtons.length -= 1;
+                button.oldValue = undefined;
+                button.className = "";
+                var relation = document.getElementById(button.relationId);
+                if (relation) relation.remove();
+              }
+            }
+
+            check(words.length, answer, li_Question, li_result, originalWords);
+          };
+          parent.appendChild(button);
+        });
+      }
+
+      function createPlayLink(liparent, words) {
+        var link_play = document.createElement("a");
+        link_play.textContent = "播放";
+        link_play.href =
+          "https://dict.youdao.com/dictvoice?audio=" +
+          words.join("+") +
+          "&le=eng&le=eng&type=2";
+        liparent.appendChild(link_play);
+      }
+      function createResetButton(liparent, li_Question, li_words) {
         var btn_reset = document.createElement("button");
         btn_reset.textContent = "重置";
         btn_reset.onclick = function () {
+          li_Question.lastButtons.forEach((element) => {
+            element.className = "";
+            element.oldValue = undefined;
+          });
+          li_Question.lastButtons = [];
           for (
             let index = li_Question.childElementCount - 1;
             index >= 0;
@@ -95,52 +233,17 @@
             element.oldValue = undefined;
           }
         };
-        li_title.appendChild(btn_reset);
-        var link_play = document.createElement("a");
-        link_play.textContent = "播放";
-        link_play.href =
-          "https://dict.youdao.com/dictvoice?audio=" +
-          d.originalWords.join("+") +
-          "&le=eng&le=eng&type=2";
-        li_title.appendChild(link_play);
-        var li_Question = document.createElement("li");
-
-        var li_words = document.createElement("li");
-        var li_result = document.createElement("li");
-        d.words.forEach((word) => {
-          var button = document.createElement("button");
-          button.innerText = word;
-          button.onclick = function () {
-            clickAudio().play();
-
-            if (button.oldValue === undefined) {
-              var li_word = document.createElement("span");
-              li_word.textContent = word;
-              if (!button.relationId) {
-                button.relationId = guid();
-              }
-              li_word.id = button.relationId;
-              button.oldValue = word;
-              li_Question.appendChild(li_word);
-            } else {
-              button.oldValue = undefined;
-              document.getElementById(button.relationId).remove();
-            }
-
-            check(d, li_Question, li_result);
-          };
-          li_words.appendChild(button);
-        });
-        ul.appendChild(li_title);
-
-        ul.appendChild(li_words);
-        ul.appendChild(li_Question);
-        ul.appendChild(li_result);
-        return li;
+        liparent.appendChild(btn_reset);
       }
 
-      function check(question, resultElements, li_result) {
-        if (question.words.length !== resultElements.childElementCount) {
+      function check(
+        wordLength,
+        answer,
+        resultElements,
+        li_result,
+        originalWords
+      ) {
+        if (wordLength !== resultElements.childElementCount) {
           li_result.textContent = "";
           return;
         }
@@ -154,14 +257,14 @@
             test += " " + element.innerText;
           }
         }
-        var isSuccess = test == question.answer;
+        var isSuccess = test == answer;
         if (isSuccess) {
           li_result.textContent = "正确";
           successAudio().play();
           setTimeout(() => {
             var href =
               "https://dict.youdao.com/dictvoice?audio=" +
-              question.originalWords.join("+") +
+              originalWords.join("+") +
               "&le=eng&le=eng&type=2";
             new Audio(href).play();
           }, 1000);
@@ -220,6 +323,16 @@
           stopPlay();
         }
       }
+      function handlerDialogEnWord(d, propertyName) {
+        d[propertyName] = d[propertyName].trim();
+        var words = d[propertyName].split(/\s/);
+        words = removeEmpty(words);
+        words.sort(randomSort);
+        d.words = words;
+        d.originalWords = d[propertyName].split(/\s/);
+        d.originalWords = removeEmpty(d.originalWords);
+      }
+
       onmousedown = function (event) {
         if (event.srcElement.tagName != "A") {
           return;
@@ -248,16 +361,10 @@
           event.preventDefault();
           event.srcElement.remove();
           $.getJSON(url, function (result) {
-            result.forEach((d) => {
-              d.answer = d.answer.trim();
-              var words = d.answer.split(/\s/);
-              words = removeEmpty(words);
-              words.sort(randomSort);
-              d.words = words;
-              d.originalWords = d.answer.split(/\s/);
-              d.originalWords = removeEmpty(d.originalWords);
+            result.questions.forEach((d) => {
+              handlerDialogEnWord(d, "answer");
             });
-            createQuestion(result);
+            createQuestion(result.questions);
           });
           return false;
         }

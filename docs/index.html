@@ -361,10 +361,10 @@
           event.preventDefault();
           event.srcElement.remove();
           $.getJSON(url, function (result) {
-            result.questions.forEach((d) => {
+            result.forEach((d) => {
               handlerDialogEnWord(d, "answer");
             });
-            createQuestion(result.questions);
+            createQuestion(result);
           });
           return false;
         }

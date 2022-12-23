@@ -7,13 +7,12 @@ var clickAudioUrl =
 var clickAudio = [];
 for (let index = 0; index < maxAudioNumber; index++) {
     var temp = new Audio(clickAudioUrl);
-    temp.error=function(error){
+    temp.error = function (error) {
         alert("play error!!");
         alert(error);
-        temp.currentTime=0;
+        temp.currentTime = 0;
         temp.play();
     }
-    error.
     clickAudio.push(temp);
 }
 
@@ -91,7 +90,7 @@ function createOneQuestion(d) {
     ul.appendChild(li_words);
     ul.appendChild(li_action);
     ul.appendChild(li_result);
-   
+
     return li;
 }
 function createOneDialog(d) {
@@ -122,8 +121,8 @@ function createOneDialog(d) {
         createResetButton(li_action, li_Question, li_words);
         createPlayLink(li_action, answer.originalWords);
         ul.appendChild(li_Question);
-        ul.appendChild(li_words); 
-        ul.appendChild(li_action); 
+        ul.appendChild(li_words);
+        ul.appendChild(li_action);
         ul.appendChild(li_result);
     });
 

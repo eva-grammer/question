@@ -64,11 +64,12 @@ function createOneQuestion(d) {
     var li_title = document.createElement("li");
     li_title.textContent = d.title;
     var li_Question = document.createElement("li");
+    var li_action = document.createElement("li");
     var li_result = document.createElement("li");
     var li_words = document.createElement("li");
 
-    createResetButton(li_result, li_Question, li_words);
-    createPlayLink(li_result, d.originalWords);
+    createResetButton(li_action, li_Question, li_words);
+    createPlayLink(li_action, d.originalWords);
 
     createWordButton(
         d.words,

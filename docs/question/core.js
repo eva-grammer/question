@@ -81,9 +81,10 @@ function createOneQuestion(d) {
     );
     ul.appendChild(li_title);
     ul.appendChild(li_Question);
+    ul.appendChild(li_words);
     ul.appendChild(li_action);
     ul.appendChild(li_result);
-    ul.appendChild(li_words);
+   
     return li;
 }
 function createOneDialog(d) {
@@ -113,10 +114,9 @@ function createOneDialog(d) {
 
         createResetButton(li_action, li_Question, li_words);
         createPlayLink(li_action, answer.originalWords);
-        ul.appendChild(li_words);
         ul.appendChild(li_Question);
-        ul.appendChild(li_action);
-
+        ul.appendChild(li_words); 
+        ul.appendChild(li_action); 
         ul.appendChild(li_result);
     });
 

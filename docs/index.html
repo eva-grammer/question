@@ -38,39 +38,18 @@
     </script>
     <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
     <script>
-      let currentAudio = null;
       let tempAudio = null;
       let lastElement = null;
-      let _clickAudio = null;
-      let _successAudio = null;
-      let _failAudio = null;
-      var clickAudio = function () {
-        if (_clickAudio == null) {
-          _clickAudio = new Audio(
-            "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav"
-          );
-        }
 
-        return _clickAudio;
-      };
-      var successAudio = function () {
-        if (_successAudio == null) {
-          _successAudio = new Audio(
-            "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
-          );
-        }
-
-        return _successAudio;
-      };
-      var failAudio = function () {
-        if (_failAudio == null) {
-          _failAudio = new Audio(
-            "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav"
-          );
-        }
-
-        return _failAudio;
-      };
+      var clickAudio = new Audio(
+        "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav"
+      );
+      var successAudio = new Audio(
+        "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
+      );
+      var failAudio = new Audio(
+        "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav"
+      );
       function randomSort(a, b) {
         return Math.random() > 0.5 ? -1 : 1;
       }
@@ -188,7 +167,7 @@
           var button = document.createElement("button");
           button.innerText = word;
           button.onclick = function () {
-            playAudion(clickAudio());
+            playAudion(clickAudio);
             if (li_Question.childElementCount == 0) {
               li_Question.lastButtons = [];
             }
@@ -220,25 +199,24 @@
           parent.appendChild(button);
         });
       }
-      function playAudion(audio) {
+      function playAudion(audio, onerror) {
         try {
           audio.currentTime = 0;
           audio.play();
         } catch (error) {
+          if (onerror) {
+            onerror();
+          }
           console.log(error);
         }
       }
-      function playAudionWithUrl(url) {
+      function playAudionWithUrl(url, onError) {
         if (tempAudio == null) {
           tempAudio = new Audio(url);
-        } else {
-          tempAudio.pause();
         }
-        try {
-          tempAudio.play();
-        } catch (error) {
-          console.log(error);
-        }
+        tempAudio.url = url;
+        tempAudio.loop = loop;
+        playAudion(tempAudio, onError);
       }
       function createPlayLink(liparent, words) {
         var link_play = document.createElement("a");
@@ -298,7 +276,7 @@
         var isSuccess = test == answer;
         if (isSuccess) {
           li_result.textContent = "正确";
-          playAudion(successAudio());
+          playAudion(successAudio);
           setTimeout(() => {
             var href =
               "https://dict.youdao.com/dictvoice?audio=" +
@@ -308,7 +286,7 @@
           }, 1000);
         } else {
           li_result.textContent = "错误";
-          playAudion(failAudio());
+          playAudion(failAudio);
         }
       }
       function guid() {
@@ -341,24 +319,14 @@
       function stopPlay() {
         if (!lastElement) return;
         lastElement.innerText = lastElement.oldText;
-        if (currentAudio != null) {
-          currentAudio.pause();
+        if (tempAudio != null) {
+          tempAudio.pause();
         }
       }
       function playOne(element) {
         startPlay(element);
         let url = element.href;
-        currentAudio = new Audio(url);
-        currentAudio.onended = function () {
-          setTimeout((v) => playAudion(currentAudio), 500);
-        };
-        try {
-          currentAudio.play();
-        } catch (e) {
-          console.error(e);
-
-          stopPlay();
-        }
+        playAudionWithUrl(url, true, stopPlay);
       }
       function handlerDialogEnWord(d, propertyName) {
         d[propertyName] = d[propertyName].trim();

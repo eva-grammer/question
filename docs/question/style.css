@@ -1,0 +1,13 @@
+li span,
+li button {
+    margin: 10px;
+}
+
+li {
+    word-break: break-word;
+}
+
+.select {
+    background-color: rgb(241 232 228);
+    -webkit-appearance: none;
+}

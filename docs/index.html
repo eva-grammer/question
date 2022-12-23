@@ -169,7 +169,7 @@
         words.forEach((word) => {
           var button = document.createElement("button");
           button.innerText = word;
-          button.onclick = function () { 
+          button.onclick = function () {
             playAudion(clickAudio());
             if (li_Question.childElementCount == 0) {
               li_Question.lastButtons = [];
@@ -205,7 +205,7 @@
       function playAudion(audio) {
         return;
         try {
-            audio.play();
+          audio.play();
         } catch (error) {
           console.log(error);
         }
@@ -274,13 +274,11 @@
               "https://dict.youdao.com/dictvoice?audio=" +
               originalWords.join("+") +
               "&le=eng&le=eng&type=2";
-              playAudion( new Audio(href));
-
+            playAudion(new Audio(href));
           }, 1000);
         } else {
           li_result.textContent = "错误";
-          playAudion( failAudio());
-
+          playAudion(failAudio());
         }
       }
       function guid() {
@@ -322,10 +320,10 @@
         let url = element.href;
         currentAudio = new Audio(url);
         currentAudio.onended = function () {
-          setTimeout((v) =>    playAudion( currentAudio), 500);
+          setTimeout((v) => playAudion(currentAudio), 500);
         };
         try {
-         await currentAudio.play();
+          currentAudio.play();
         } catch (e) {
           console.error(e);
 

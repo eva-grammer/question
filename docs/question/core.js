@@ -188,28 +188,22 @@ function createWordButton(
         parent.appendChild(button);
     });
 }
-function playAudion(audio, onerror) {
-    try {
-        audio.currentTime = 0;
-        audio.play();
-    } catch (error) {
-        if (onerror) {
-            onerror();
-        } else {
-            audio.currentTime = 0;
-            audio.play();
-        }
-        alert(error);
-        console.log(error);
-    }
+function playAudion(audio) {
+    audio.currentTime = 0;
+    audio.play();
 }
 function playAudionWithUrl(url, loop, onError) {
     if (tempAudio == null) {
         tempAudio = new Audio(url);
+        tempAudio.error = function () {
+            if (onError) {
+                onError();
+            }
+        }
     }
     tempAudio.src = url;
     tempAudio.loop = loop;
-    playAudion(tempAudio, onError);
+    playAudion(tempAudio);
 }
 function createPlayLink(liparent, words) {
     var link_play = document.createElement("a");

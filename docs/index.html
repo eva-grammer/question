@@ -169,7 +169,7 @@
         words.forEach((word) => {
           var button = document.createElement("button");
           button.innerText = word;
-          button.onclick = function () {
+          button.onclick = function () { 
             playAudion(clickAudio());
             if (li_Question.childElementCount == 0) {
               li_Question.lastButtons = [];
@@ -203,6 +203,7 @@
         });
       }
       function playAudion(audio) {
+        return;
         try {
             audio.play();
         } catch (error) {

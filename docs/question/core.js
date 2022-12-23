@@ -65,9 +65,8 @@ let tempAudio = null;
         li_title.textContent = d.title;
         var li_Question = document.createElement("li");
         var li_words = document.createElement("li");
-        createResetButton(li_title, li_Question, li_words);
-        createPlayLink(li_title, d.originalWords);
-        var link_play = document.createElement("a");
+        createResetButton(li_result, li_Question, li_words);
+        createPlayLink(li_result, d.originalWords); 
         var li_words = document.createElement("li");
         var li_result = document.createElement("li");
         createWordButton(

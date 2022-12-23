@@ -354,7 +354,7 @@
         d.originalWords = d[propertyName].split(/\s/);
         d.originalWords = removeEmpty(d.originalWords);
       }
-      function createNextLink(url) {
+      function createNextLink() {
         let url = decodeURI(location.href);
         let index = url.lastIndexOf("/");
         let priStr = url.substr(0, index + 2);

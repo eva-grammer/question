@@ -170,7 +170,7 @@
           var button = document.createElement("button");
           button.innerText = word;
           button.onclick = function () {
-            clickAudio().play();
+            playAudion(clickAudio());
             if (li_Question.childElementCount == 0) {
               li_Question.lastButtons = [];
             }
@@ -202,7 +202,13 @@
           parent.appendChild(button);
         });
       }
-
+      function playAudion(audio) {
+        try {
+          await audio.play();
+        } catch (error) {
+          console.log(error);
+        }
+      }
       function createPlayLink(liparent, words) {
         var link_play = document.createElement("a");
         link_play.textContent = "播放";
@@ -261,18 +267,19 @@
         var isSuccess = test == answer;
         if (isSuccess) {
           li_result.textContent = "正确";
-          successAudio().play();
+          playAudion(successAudio());
           setTimeout(() => {
             var href =
               "https://dict.youdao.com/dictvoice?audio=" +
               originalWords.join("+") +
               "&le=eng&le=eng&type=2";
-            new Audio(href).play();
+              playAudion( new Audio(href));
+
           }, 1000);
         } else {
           li_result.textContent = "错误";
+          playAudion( failAudio());
 
-          failAudio().play();
         }
       }
       function guid() {
@@ -314,10 +321,10 @@
         let url = element.href;
         currentAudio = new Audio(url);
         currentAudio.onended = function () {
-          setTimeout((v) => currentAudio.play(), 500);
+          setTimeout((v) =>    playAudion( currentAudio), 500);
         };
         try {
-          currentAudio.play();
+         await currentAudio.play();
         } catch (e) {
           console.error(e);
 

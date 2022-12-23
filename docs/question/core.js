@@ -81,6 +81,7 @@ function createOneQuestion(d) {
     );
     ul.appendChild(li_title);
     ul.appendChild(li_Question);
+    ul.appendChild(li_action);
     ul.appendChild(li_result);
     ul.appendChild(li_words);
     return li;

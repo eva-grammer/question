@@ -39,20 +39,38 @@
     <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
     <script>
       let currentAudio = null;
+      let tempAudio = null;
       let lastElement = null;
+      let _clickAudio = null;
+      let _successAudio = null;
+      let _failAudio = null;
       var clickAudio = function () {
-        return new Audio(
-          "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav"
-        );
+        if (_clickAudio == null) {
+          _clickAudio = new Audio(
+            "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav"
+          );
+        }
+        _clickAudio.pause();
+        return _clickAudio;
       };
-      var successAudio = () =>
-        new Audio(
-          "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
-        );
-      var failAudio = () =>
-        new Audio(
-          "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav"
-        );
+      var successAudio = function () {
+        if (_successAudio == null) {
+          _successAudio = new Audio(
+            "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
+          );
+        }
+        _successAudio.pause();
+        return _successAudio;
+      };
+      var failAudio = function () {
+        if (_failAudio == null) {
+          _failAudio = new Audio(
+            "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav"
+          );
+        }
+        _failAudio.pause();
+        return _failAudio;
+      };
       function randomSort(a, b) {
         return Math.random() > 0.5 ? -1 : 1;
       }
@@ -203,9 +221,20 @@
         });
       }
       function playAudion(audio) {
-        return;
         try {
           audio.play();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      function playAudionWithUrl(url) {
+        if (tempAudio == null) {
+          tempAudio = new Audio(url);
+        } else {
+          tempAudio.pause();
+        }
+        try {
+          tempAudio.play();
         } catch (error) {
           console.log(error);
         }
@@ -274,7 +303,7 @@
               "https://dict.youdao.com/dictvoice?audio=" +
               originalWords.join("+") +
               "&le=eng&le=eng&type=2";
-            playAudion(new Audio(href));
+            playAudionWithUrl(href);
           }, 1000);
         } else {
           li_result.textContent = "错误";

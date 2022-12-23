@@ -7,6 +7,13 @@ var clickAudioUrl =
 var clickAudio = [];
 for (let index = 0; index < maxAudioNumber; index++) {
     var temp = new Audio(clickAudioUrl);
+    temp.error=function(error){
+        alert("play error!!");
+        alert(error);
+        temp.currentTime=0;
+        temp.play();
+    }
+    error.
     clickAudio.push(temp);
 }
 

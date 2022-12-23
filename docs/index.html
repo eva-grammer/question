@@ -364,7 +364,7 @@
         let nextLink = document.createElement("A");
         nextLink.href = newUrl;
         nextLink.target = "_self";
-        nextLink.textContent="下一节";
+        nextLink.textContent = "下一节";
         var article = document.getElementsByTagName("article")[0];
         article.appendChild(nextLink);
       }
@@ -429,10 +429,18 @@
           event.preventDefault();
           event.srcElement.remove();
           $.getJSON(url, function (result) {
-            result.forEach((d) => {
+            result.questions.forEach((d) => {
               handlerDialogEnWord(d, "answer");
             });
-            createQuestion(result);
+            createQuestion(result.questions);
+            if (result.dialogs) {
+              result.dialogs.forEach((d) => {
+                d.answer.forEach((d) => {
+                  handlerDialogEnWord(d, "en");
+                });
+              });
+              createDialog(result.dialogs);
+            }
             createNextLink();
           });
           return false;

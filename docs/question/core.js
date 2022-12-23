@@ -8,20 +8,28 @@ var clickAudio = [];
 for (let index = 0; index < maxAudioNumber; index++) {
     var temp = new Audio(clickAudioUrl);
     temp.error = function (error) {
-        alert("play error!!");
-        alert(error);
-        temp.currentTime = 0;
-        temp.play();
+        onAudioError(temp, error);
     }
     clickAudio.push(temp);
 }
 
+function onAudioError(audio, error) {
+    audio.currentTime = 0;
+    audio.play();
+    console.error(error);
+}
 var successAudio = new Audio(
     "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
 );
+successAudio.error = function (error) {
+    onAudioError(successAudio, error);
+}
 var failAudio = new Audio(
     "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav"
 );
+failAudio.error = function (error) {
+    onAudioError(failAudio, error);
+}
 function randomSort(a, b) {
     return Math.random() > 0.5 ? -1 : 1;
 }

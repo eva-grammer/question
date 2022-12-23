@@ -39,11 +39,16 @@
     <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
     <script>
       let tempAudio = null;
+      let maxAudioNumber = 4;
       let lastElement = null;
+      currentPlayNumber = 0;
+      var clickAudioUrl =
+        "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav";
+      var clickAudio = [];
+      for (let index = 0; index < maxAudioNumber; index++) {
+        clickAudio.push[new Audio(clickAudioUrl)];
+      }
 
-      var clickAudio = new Audio(
-        "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav"
-      );
       var successAudio = new Audio(
         "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
       );
@@ -167,7 +172,14 @@
           var button = document.createElement("button");
           button.innerText = word;
           button.onclick = function () {
-            playAudion(clickAudio);
+            let audio = clickAudio[currentPlayNumber];
+
+            if (currentPlayNumber == maxAudioNumber - 1) {
+              currentPlayNumber = 0;
+            } else {
+              currentPlayNumber++;
+            }
+            playAudion(audio);
             if (li_Question.childElementCount == 0) {
               li_Question.lastButtons = [];
             }

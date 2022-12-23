@@ -355,7 +355,18 @@
         d.originalWords = removeEmpty(d.originalWords);
       }
       function createNextLink(url) {
-       var url= decodeURI(location.href);
+        let url = decodeURI(location.href);
+        let index = url.lastIndexOf("/");
+        let priStr = url.substr(0, index + 2);
+        let nextStr = url.substr(index + 2) * 1 + 1;
+        nextStr = nextStr.toString().padStart(3, "0");
+        let newUrl = priStr + nextStr;
+        let nextLink = document.createElement("A");
+        nextLink.href = newUrl;
+        nextLink.target = "_self";
+        nextLink.textContent="下一节";
+        var article = document.getElementsByTagName("article")[0];
+        article.appendChild(nextLink);
       }
       function playLinkClick(srcElement) {
         var innerText = srcElement.innerText;

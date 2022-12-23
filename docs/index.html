@@ -222,6 +222,7 @@
       }
       function playAudion(audio) {
         try {
+          audio.currentTime = 0;
           audio.play();
         } catch (error) {
           console.log(error);

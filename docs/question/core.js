@@ -185,7 +185,7 @@ function playAudion(audio, onerror) {
             audio.currentTime = 0;
             audio.play();
         }
-
+        alert(error);
         console.log(error);
     }
 }

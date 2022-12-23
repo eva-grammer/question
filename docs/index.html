@@ -219,7 +219,11 @@
         } catch (error) {
           if (onerror) {
             onerror();
+          } else {
+            audio.currentTime = 0;
+            audio.play();
           }
+
           console.log(error);
         }
       }
@@ -350,44 +354,28 @@
         d.originalWords = d[propertyName].split(/\s/);
         d.originalWords = removeEmpty(d.originalWords);
       }
-
-      onmousedown = function (event) {
-        if (event.srcElement.tagName != "A") {
-          return;
-        }
-        event.preventDefault();
-        var innerText = event.srcElement.innerText;
+      function createNextLink(url) {
+       var url= decodeURI(location.href);
+      }
+      function playLinkClick(srcElement) {
+        var innerText = srcElement.innerText;
         if (innerText == "播放") {
-          event.srcElement.onclick = function (e) {
+          srcElement.onclick = function (e) {
             e.preventDefault();
-            return false;
           };
-          playOne(event.srcElement);
-          return false;
+          playOne(srcElement);
+          return true;
         }
         if (innerText == "停止") {
-          event.srcElement.onclick = function (e) {
+          srcElement.onclick = function (e) {
             e.preventDefault();
             return false;
           };
           stopPlay(lastElement);
-          return false;
+          return true;
         }
-        var url = event.srcElement.href.replace("/#/./", "/");
-
-        if (innerText == "生成题库") {
-          event.preventDefault();
-          event.srcElement.remove();
-          $.getJSON(url, function (result) {
-            result.forEach((d) => {
-              handlerDialogEnWord(d, "answer");
-            });
-            createQuestion(result);
-          });
-          return false;
-        }
-      };
-
+        return false;
+      }
       window.onload = function () {
         document.addEventListener("touchstart", function (event) {
           if (event.touches.length > 1) {
@@ -412,6 +400,32 @@
         document.addEventListener("gesturestart", function (event) {
           event.preventDefault();
         });
+      };
+
+      onmousedown = function (event) {
+        if (event.srcElement.tagName != "A") {
+          return;
+        }
+        event.preventDefault();
+        var innerText = event.srcElement.innerText;
+        var isPlayLink = playLinkClick(event.srcElement);
+        if (isPlayLink) {
+          return false;
+        }
+        var url = event.srcElement.href.replace("/#/./", "/");
+
+        if (innerText == "生成题库") {
+          event.preventDefault();
+          event.srcElement.remove();
+          $.getJSON(url, function (result) {
+            result.forEach((d) => {
+              handlerDialogEnWord(d, "answer");
+            });
+            createQuestion(result);
+            createNextLink();
+          });
+          return false;
+        }
       };
     </script>
   </body>

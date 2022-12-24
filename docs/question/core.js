@@ -423,7 +423,11 @@ window.onload = function () {
         event.preventDefault();
     });
 };
-
+function reloadByUrl(url) {
+    this.document.location.href = url;
+    this.document.location.reload();
+    return false;
+}
 onmousedown = function (event) {
     if (event.srcElement.tagName != "A") {
         return;
@@ -436,9 +440,7 @@ onmousedown = function (event) {
     }
     var url = event.srcElement.href;
     if (innerText == "下一节") {
-        this.document.location.href = url;
-        this.document.location.reload();
-        return false;
+        return reloadByUrl(url);
     } else
         if (innerText == "生成题库") {
             event.preventDefault();
@@ -461,5 +463,11 @@ onmousedown = function (event) {
                 createErrorInfoBox()
             });
             return false;
+        }
+        else {
+            var rootTagName = event.srcElement.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.tagName;
+            if (rootTagName == "ASIDE") {
+                return reloadByUrl(url);
+            }
         }
 };

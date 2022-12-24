@@ -7,29 +7,18 @@ var clickAudioUrl =
 var clickAudio = [];
 for (let index = 0; index < maxAudioNumber; index++) {
     var temp = new Audio(clickAudioUrl);
-    temp.error = function (error) {
-        onAudioError(temp, error);
-    }
     clickAudio.push(temp);
 }
 
-function onAudioError(audio, error) {
-    audio.currentTime = 0;
-    audio.play();
-    console.error(error);
-}
+
 var successAudio = new Audio(
     "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
 );
-successAudio.error = function (error) {
-    onAudioError(successAudio, error);
-}
+
 var failAudio = new Audio(
     "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav"
 );
-failAudio.error = function (error) {
-    onAudioError(failAudio, error);
-}
+
 function randomSort(a, b) {
     return Math.random() > 0.5 ? -1 : 1;
 }
@@ -188,22 +177,31 @@ function createWordButton(
         parent.appendChild(button);
     });
 }
-function playAudion(audio) {
+function playAudion(audio, onError) {
     audio.currentTime = 0;
-    audio.play();
+    audio.canPause = false;
+    var playPromise = audio.play();
+    if (playPromise !== undefined) {
+        playPromise.then(_ => {
+            audio.canPause = true;
+        }).catch(error => {
+
+            if (onerror) {
+                onError();
+            } else {
+                audio = new Audio(audio.src); 
+                playAudion(audio);
+            }
+        });
+    }
 }
 function playAudionWithUrl(url, loop, onError) {
     if (tempAudio == null) {
         tempAudio = new Audio(url);
-        tempAudio.error = function () {
-            if (onError) {
-                onError();
-            }
-        }
     }
     tempAudio.src = url;
     tempAudio.loop = loop;
-    playAudion(tempAudio);
+    playAudion(tempAudio, onError);
 }
 function createPlayLink(liparent, words) {
     var link_play = document.createElement("a");
@@ -306,7 +304,7 @@ function startPlay(element) {
 function stopPlay() {
     if (!lastElement) return;
     lastElement.innerText = lastElement.oldText;
-    if (tempAudio != null) {
+    if (tempAudio != null && audio.canPause) {
         tempAudio.pause();
     }
 }

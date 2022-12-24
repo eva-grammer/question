@@ -34,8 +34,11 @@ function removeEmpty(array) {
 }
 console.error = function (error) {
     if (errorInfoBox) {
-        errorInfoBox.value += error;
+        errorInfoBox.value += error + "\r\n";
     }
+}
+window.onerror = function (error) {
+    console.error(error)
 }
 function createQuestion(data) {
     var article = document.getElementsByTagName("article")[0];
@@ -184,8 +187,9 @@ function createWordButton(
     });
 }
 function playAudion(audio, onError) {
-    console.error("sdfsdf\r\n")
-    audio.currentTime = 0;
+    if (audio.duration) {
+        audio.currentTime = 0;
+    }
     audio.canPause = false;
     var playPromise = audio.play();
     if (playPromise !== undefined) {
@@ -312,7 +316,7 @@ function startPlay(element) {
 function stopPlay() {
     if (!lastElement) return;
     lastElement.innerText = lastElement.oldText;
-    if (tempAudio != null && audio.canPause) {
+    if (tempAudio != null && tempAudio.canPause) {
         tempAudio.pause();
     }
 }

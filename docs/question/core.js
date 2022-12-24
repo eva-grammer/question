@@ -434,7 +434,7 @@ onmousedown = function (event) {
     if (isPlayLink) {
         return false;
     }
-    var url = event.srcElement.href.replace("/#/./", "/");
+    var url = event.srcElement.href;
     if (innerText == "下一节") {
         this.document.location.href = url;
         return false;

@@ -217,11 +217,16 @@ function playAudionWithUrl(url, loop, onError) {
     }
     if (audio == null) {
         audio = new Audio(url);
+        if (loop) {
+            currentPlayAudio = audio;
+            audio.loop = loop;
+        } else {
+            tempAudio = audio;
+        }
+
     } else {
         audio.src = url;
     }
-
-    audio.loop = loop;
     playAudion(audio, onError);
 }
 function createPlayLink(liparent, words) {

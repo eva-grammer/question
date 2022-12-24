@@ -80,7 +80,7 @@ function createOneQuestion(d) {
     var li_action = document.createElement("li");
     var li_result = document.createElement("li");
     var li_words = document.createElement("li");
-
+    li_words.className = "select-word";
     createResetButton(li_action, li_Question, li_words);
     createPlayLink(li_action, d.originalWords);
 
@@ -113,6 +113,7 @@ function createOneDialog(d) {
     });
     d.answer.forEach((answer) => {
         let li_words = document.createElement("li");
+        li_words.className = "select-word";
         let li_Question = document.createElement("li");
         let li_action = document.createElement("li");
         var li_result = document.createElement("li");
@@ -287,6 +288,7 @@ function check(
     var isSuccess = test == answer;
     if (isSuccess) {
         li_result.textContent = "正确";
+        li_result.className= "success";
         playAudion(successAudio);
         setTimeout(() => {
             var href =
@@ -298,6 +300,7 @@ function check(
         }, 1000);
     } else {
         li_result.textContent = "错误";
+        li_result.className= "error";
         playAudion(failAudio);
     }
 }

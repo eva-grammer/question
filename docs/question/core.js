@@ -349,6 +349,7 @@ function createErrorInfoBox() {
 
     errorInfoBox = document.createElement("textarea");
     errorInfoBox.rows = "10";
+    var article = document.getElementsByTagName("article")[0];
     article.appendChild(errorInfoBox);
 }
 function playLinkClick(srcElement) {

@@ -4,7 +4,9 @@ li button {
 }
 
 li {
-    word-break: break-word;
+    word-break: keep-all;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .select {
@@ -13,7 +15,7 @@ li {
     color: red;
 }
 
-.select-word span{
+.select-word span {
     color: red;
 }
 
@@ -24,7 +26,8 @@ li {
 .success {
     color: green;
 }
-.markdown-section{
+
+.markdown-section {
     margin: 0 10px;
     margin-bottom: 50px;
     padding: 0;

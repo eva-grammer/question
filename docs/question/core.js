@@ -1,4 +1,5 @@
 let tempAudio = null;
+let errorInfoBox = null;
 let maxAudioNumber = 4;
 let lastElement = null;
 currentPlayNumber = 0;
@@ -30,6 +31,11 @@ function removeEmpty(array) {
         }
     });
     return newArray;
+}
+console.error = function (error) {
+    if (errorInfoBox) {
+        errorInfoBox.value += error;
+    }
 }
 function createQuestion(data) {
     var article = document.getElementsByTagName("article")[0];
@@ -186,10 +192,11 @@ function playAudion(audio, onError) {
             audio.canPause = true;
         }).catch(error => {
 
+            console.error(error);
             if (onerror) {
                 onError();
             } else {
-                audio = new Audio(audio.src); 
+                audio = new Audio(audio.src);
                 playAudion(audio);
             }
         });
@@ -334,7 +341,15 @@ function createNextLink() {
     nextLink.target = "_self";
     nextLink.textContent = "下一节";
     var article = document.getElementsByTagName("article")[0];
+
     article.appendChild(nextLink);
+}
+
+function createErrorInfoBox() {
+
+    errorInfoBox = document.createElement("textarea");
+    errorInfoBox.rows = "10";
+    article.appendChild(errorInfoBox);
 }
 function playLinkClick(srcElement) {
     var innerText = srcElement.innerText;
@@ -410,6 +425,7 @@ onmousedown = function (event) {
                 createDialog(result.dialogs);
             }
             createNextLink();
+            createErrorInfoBox()
         });
         return false;
     }

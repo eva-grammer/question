@@ -437,6 +437,7 @@ onmousedown = function (event) {
     var url = event.srcElement.href;
     if (innerText == "下一节") {
         this.document.location.href = url;
+        this.document.location.reload();
         return false;
     } else
         if (innerText == "生成题库") {

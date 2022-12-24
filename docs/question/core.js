@@ -435,26 +435,30 @@ onmousedown = function (event) {
         return false;
     }
     var url = event.srcElement.href.replace("/#/./", "/");
-
-    if (innerText == "生成题库") {
-        event.preventDefault();
-        event.srcElement.remove();
-        $.getJSON(url, function (result) {
-            result.questions.forEach((d) => {
-                handlerDialogEnWord(d, "answer");
-            });
-            createQuestion(result.questions);
-            if (result.dialogs) {
-                result.dialogs.forEach((d) => {
-                    d.answer.forEach((d) => {
-                        handlerDialogEnWord(d, "en");
-                    });
-                });
-                createDialog(result.dialogs);
-            }
-            createNextLink();
-            createErrorInfoBox()
-        });
+    if (innerText == "下一节") {
+        this.document.location.href = url;
         return false;
-    }
+    } else
+        if (innerText == "生成题库") {
+            event.preventDefault();
+            event.srcElement.remove();
+            url = url.replace("/#/./", "/");
+            $.getJSON(url, function (result) {
+                result.questions.forEach((d) => {
+                    handlerDialogEnWord(d, "answer");
+                });
+                createQuestion(result.questions);
+                if (result.dialogs) {
+                    result.dialogs.forEach((d) => {
+                        d.answer.forEach((d) => {
+                            handlerDialogEnWord(d, "en");
+                        });
+                    });
+                    createDialog(result.dialogs);
+                }
+                createNextLink();
+                createErrorInfoBox()
+            });
+            return false;
+        }
 };

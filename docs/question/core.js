@@ -184,7 +184,7 @@ function createWordButton(
     });
 }
 function playAudion(audio, onError) {
-    console.error("sdfsdf")
+    console.error("sdfsdf\r\n")
     audio.currentTime = 0;
     audio.canPause = false;
     var playPromise = audio.play();

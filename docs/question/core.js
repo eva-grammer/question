@@ -1,4 +1,5 @@
 let tempAudio = null;
+let currentPlayAudio = null;
 let errorInfoBox = null;
 let maxAudioNumber = 4;
 let lastElement = null;
@@ -208,12 +209,20 @@ function playAudion(audio, onError) {
     }
 }
 function playAudionWithUrl(url, loop, onError) {
-    if (tempAudio == null) {
-        tempAudio = new Audio(url);
+    let audio = null;
+    if (loop) {
+        audio = currentPlayAudio;
+    } else {
+        audio = tempAudio;
     }
-    tempAudio.src = url;
-    tempAudio.loop = loop;
-    playAudion(tempAudio, onError);
+    if (audio == null) {
+        audio = new Audio(url);
+    } else {
+        audio.src = url;
+    }
+
+    audio.loop = loop;
+    playAudion(audio, onError);
 }
 function createPlayLink(liparent, words) {
     var link_play = document.createElement("a");
@@ -317,8 +326,8 @@ function startPlay(element) {
 function stopPlay() {
     if (!lastElement) return;
     lastElement.innerText = lastElement.oldText;
-    if (tempAudio != null && tempAudio.canPause) {
-        tempAudio.pause();
+    if (currentPlayAudio != null && currentPlayAudio.canPause) {
+        currentPlayAudio.pause();
     }
 }
 function playOne(element) {
@@ -372,7 +381,7 @@ function playLinkClick(srcElement) {
             e.preventDefault();
             return false;
         };
-        stopPlay(lastElement);
+        stopPlay();
         return true;
     }
     return false;

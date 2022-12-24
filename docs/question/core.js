@@ -76,10 +76,12 @@ function createOneQuestion(d) {
     li.appendChild(ul);
     var li_title = document.createElement("li");
     li_title.textContent = d.title;
-    var li_Question = document.createElement("li");
+    var li_QuestionParent = document.createElement("li");
     var li_action = document.createElement("li");
     var li_result = document.createElement("li");
     var li_words = document.createElement("li");
+    var li_Question = document.createElement("div");
+    li_QuestionParent.appendChild(li_Question);
     li_Question.className = "select-word";
     createResetButton(li_action, li_Question, li_words);
     createPlayLink(li_action, d.originalWords);
@@ -93,7 +95,7 @@ function createOneQuestion(d) {
         li_result
     );
     ul.appendChild(li_title);
-    ul.appendChild(li_Question);
+    ul.appendChild(li_QuestionParent);
     ul.appendChild(li_words);
     ul.appendChild(li_action);
     ul.appendChild(li_result);
@@ -112,8 +114,10 @@ function createOneDialog(d) {
         ul.appendChild(li_title1);
     });
     d.answer.forEach((answer) => {
-        let li_words = document.createElement("li");       
-        let li_Question = document.createElement("li");
+        let li_words = document.createElement("li");
+        let li_QuestionParent = document.createElement("li");
+        var li_Question = document.createElement("div");
+        li_QuestionParent.appendChild(li_Question);
         li_Question.className = "select-word";
         let li_action = document.createElement("li");
         var li_result = document.createElement("li");
@@ -128,7 +132,7 @@ function createOneDialog(d) {
 
         createResetButton(li_action, li_Question, li_words);
         createPlayLink(li_action, answer.originalWords);
-        ul.appendChild(li_Question);
+        ul.appendChild(li_QuestionParent);
         ul.appendChild(li_words);
         ul.appendChild(li_action);
         ul.appendChild(li_result);
@@ -288,7 +292,7 @@ function check(
     var isSuccess = test == answer;
     if (isSuccess) {
         li_result.textContent = "正确";
-        li_result.className= "success";
+        li_result.className = "success";
         playAudion(successAudio);
         setTimeout(() => {
             var href =
@@ -300,7 +304,7 @@ function check(
         }, 1000);
     } else {
         li_result.textContent = "错误";
-        li_result.className= "error";
+        li_result.className = "error";
         playAudion(failAudio);
     }
 }

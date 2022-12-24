@@ -4,6 +4,11 @@ li button {
 }
 
 li {
+    word-break: break-all;
+
+}
+
+li div {
     word-break: keep-all;
     display: flex;
     flex-wrap: wrap;

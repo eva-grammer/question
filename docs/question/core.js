@@ -279,6 +279,7 @@ function check(
                 "https://dict.youdao.com/dictvoice?audio=" +
                 originalWords.join("+") +
                 "&le=eng&le=eng&type=2";
+            stopPlay();
             playAudionWithUrl(href, false);
         }, 1000);
     } else {

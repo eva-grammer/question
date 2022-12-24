@@ -231,8 +231,9 @@ function playAudionWithUrl(url, loop, onError) {
     if (audio == null) {
         audio = new Audio(url);
         if (loop) {
-            currentPlayAudio.errorSource = "播放音频";
+            
             currentPlayAudio = audio;
+            currentPlayAudio.errorSource = "播放音频";
             audio.loop = loop;
         } else {
             tempAudio = audio;

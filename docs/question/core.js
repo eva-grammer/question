@@ -80,7 +80,7 @@ function createOneQuestion(d) {
     var li_action = document.createElement("li");
     var li_result = document.createElement("li");
     var li_words = document.createElement("li");
-    li_words.className = "select-word";
+    li_Question.className = "select-word";
     createResetButton(li_action, li_Question, li_words);
     createPlayLink(li_action, d.originalWords);
 
@@ -112,9 +112,9 @@ function createOneDialog(d) {
         ul.appendChild(li_title1);
     });
     d.answer.forEach((answer) => {
-        let li_words = document.createElement("li");
-        li_words.className = "select-word";
+        let li_words = document.createElement("li");       
         let li_Question = document.createElement("li");
+        li_Question.className = "select-word";
         let li_action = document.createElement("li");
         var li_result = document.createElement("li");
         createWordButton(

@@ -9,6 +9,7 @@ var clickAudioUrl =
 var clickAudio = [];
 for (let index = 0; index < maxAudioNumber; index++) {
     var temp = new Audio(clickAudioUrl);
+    temp.errorSource = "点击声效" + index;
     clickAudio.push(temp);
 }
 
@@ -16,11 +17,11 @@ for (let index = 0; index < maxAudioNumber; index++) {
 var successAudio = new Audio(
     "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav"
 );
-
+successAudio.errorSource = "成功声效";
 var failAudio = new Audio(
     "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav"
 );
-
+failAudio.errorSource = "错误声效";
 function randomSort(a, b) {
     return Math.random() > 0.5 ? -1 : 1;
 }
@@ -39,6 +40,7 @@ console.error = function (error) {
     }
 }
 window.onerror = function (error) {
+    console.error("来自全局错误:")
     console.error(error)
 }
 function createQuestion(data) {
@@ -202,13 +204,19 @@ function playAudion(audio, onError) {
         playPromise.then(_ => {
             audio.canPause = true;
         }).catch(error => {
-
+            console.error("来自播放音频错误[" + audio.errorSource + "]:");
             console.error(error);
             if (onerror) {
                 onError();
             } else {
-                audio = new Audio(audio.src);
-                playAudion(audio);
+
+                setTimeout(() => {
+                    var errorSource = audio.errorSource;
+                    audio = new Audio(audio.src);
+                    audio.errorSource = errorSource + "-异常重试";
+                    playAudion(audio);
+                }, 500)
+
             }
         });
     }
@@ -223,10 +231,12 @@ function playAudionWithUrl(url, loop, onError) {
     if (audio == null) {
         audio = new Audio(url);
         if (loop) {
+            currentPlayAudio.errorSource = "播放音频";
             currentPlayAudio = audio;
             audio.loop = loop;
         } else {
             tempAudio = audio;
+            tempAudio.errorSource = "成功时音频";
         }
 
     } else {
@@ -376,6 +386,7 @@ function createErrorInfoBox() {
 
     errorInfoBox = document.createElement("textarea");
     errorInfoBox.rows = "10";
+    errorInfoBox.value = "错误信息：\r\n";
     var article = document.getElementsByTagName("article")[0];
     article.appendChild(errorInfoBox);
 }

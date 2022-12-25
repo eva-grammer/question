@@ -393,10 +393,7 @@ function createErrorInfoBox() {
     article.appendChild(document.createElement("br"));
     article.appendChild(document.createElement("br"));
     article.appendChild(errorInfoBox);
-    let img = document.createElement("img")
-
-    img.src = "https://res.weread.qq.com/wrepub/epub_26392463_7";
-    article.appendChild(img);
+ 
 }
 function playLinkClick(srcElement) {
     var innerText = srcElement.innerText;

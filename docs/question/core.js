@@ -431,7 +431,7 @@ function createNextLink() {
     var nav = document.getElementsByClassName("sidebar-nav")[0];
     var allLinks = nav.getElementsByTagName("a");
     var total = allLinks.length;
-    var currentUrl = document.location.hash;
+    var currentUrl = document.location.href;
     for (let index = 0; index < total; index++) {
         const element = allLinks[index];
 

@@ -198,6 +198,7 @@ function createOneHtmlContent(d, parent) {
         ul.appendChild(li_result);
         var li_describ = document.createElement("li");
         li_describ.textContent = d.describe;
+        ul.appendChild(li_describ);
         parent.appendChild(ul);
     }
 

@@ -438,11 +438,11 @@ function createNextLink() {
         if (currentUrl == element.href) {
             index += 1;
             if (index < total) {
-                let nextLink = document.createElement("A");
+                let nextLink = allLinks[index];
                 nextLink.href = nextLink.href;
                 nextLink.target = "_self";
                 nextLink.textContent = "下一节";
-                var article = document.getElementsByTagName("article")[0]; 
+                var article = document.getElementsByTagName("article")[0];
                 article.appendChild(nextLink);
                 return;
             }

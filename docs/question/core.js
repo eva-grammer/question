@@ -73,6 +73,12 @@ function createDialog(data) {
 
 function createHtmlContents(contents) {
     var article = document.getElementsByTagName("article")[0];
+    var count = article.childElementCount;
+    for (let index = 0; index < count; index++) {
+        article.removeChild(article.children[index]);
+
+    }
+
     contents.forEach((oneContent) => {
         createOneHtmlContent(oneContent, article);
     });

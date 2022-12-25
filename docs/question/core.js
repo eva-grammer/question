@@ -387,8 +387,10 @@ function createErrorInfoBox() {
 
     errorInfoBox = document.createElement("textarea");
     errorInfoBox.rows = "10";
-    errorInfoBox.value = "错误信息：\r\n";
+    errorInfoBox.value = "程序错误信息：\r\n";
     var article = document.getElementsByTagName("article")[0];
+    br = document.createElement("br");
+    article.appendChild(br);
     article.appendChild(errorInfoBox);
 }
 function playLinkClick(srcElement) {

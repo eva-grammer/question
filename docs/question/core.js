@@ -428,19 +428,31 @@ function handlerDialogEnWord(d, propertyName) {
     d.originalWords = removeEmpty(d.originalWords);
 }
 function createNextLink() {
-    let url = decodeURI(location.href);
-    let index = url.lastIndexOf("/");
-    let priStr = url.substr(0, index + 2);
-    let nextStr = url.substr(index + 2) * 1 + 1;
-    nextStr = nextStr.toString().padStart(3, "0");
-    let newUrl = priStr + nextStr;
-    let nextLink = document.createElement("A");
-    nextLink.href = newUrl;
-    nextLink.target = "_self";
-    nextLink.textContent = "下一节";
-    var article = document.getElementsByTagName("article")[0];
+    var nav = document.getElementsByClassName("sidebar-nav")[0];
+    var allLinks = nav.getElementsByTagName("a");
+    var total = allLinks.length;
+    var currentUrl = document.location.hash;
+    for (let index = 0; index < total; index++) {
+        const element = allLinks[index];
 
-    article.appendChild(nextLink);
+        if (currentUrl == element.href) {
+            index += 1;
+            if (index < total) {
+                let nextLink = document.createElement("A");
+                nextLink.href = document.location.origin + document.location.pathname + allLinks[index].href;
+                nextLink.target = "_self";
+                nextLink.textContent = "下一节";
+                var article = document.getElementsByTagName("article")[0]; 
+                article.appendChild(nextLink);
+                return;
+            }
+
+        }
+
+    }
+
+
+
 }
 
 function createErrorInfoBox() {

@@ -439,7 +439,7 @@ function createNextLink() {
             index += 1;
             if (index < total) {
                 let nextLink = document.createElement("A");
-                nextLink.href = element.href;
+                nextLink.href = nextLink.href;
                 nextLink.target = "_self";
                 nextLink.textContent = "下一节";
                 var article = document.getElementsByTagName("article")[0]; 

@@ -546,10 +546,21 @@ onmousedown = function (event) {
     var url = event.srcElement.href;
     if (innerText == "下一节") {
         return reloadByUrl(url);
-    } else {
-        var rootTagName = event.srcElement.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.tagName;
-        if (rootTagName == "ASIDE") {
+    }
+
+    else {
+
+        var localUrl = document.location.href;
+        if (localUrl.endsWith("/#/")) {
             return reloadByUrl(url);
+
+        } else {
+
+
+            var rootTagName = event.srcElement.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.tagName;
+            if (rootTagName == "ASIDE") {
+                return reloadByUrl(url);
+            }
         }
     }
 };

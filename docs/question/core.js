@@ -389,8 +389,9 @@ function createErrorInfoBox() {
     errorInfoBox.rows = "10";
     errorInfoBox.value = "程序错误信息：\r\n";
     var article = document.getElementsByTagName("article")[0];
-    br = document.createElement("br");
-    article.appendChild(br);
+   
+    article.appendChild(document.createElement("br")); 
+    article.appendChild(document.createElement("br")); 
     article.appendChild(errorInfoBox);
 }
 function playLinkClick(srcElement) {

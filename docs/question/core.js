@@ -231,7 +231,7 @@ function playAudionWithUrl(url, loop, onError) {
     if (audio == null) {
         audio = new Audio(url);
         if (loop) {
-            
+
             currentPlayAudio = audio;
             currentPlayAudio.errorSource = "播放音频";
             audio.loop = loop;
@@ -389,10 +389,14 @@ function createErrorInfoBox() {
     errorInfoBox.rows = "10";
     errorInfoBox.value = "程序错误信息：\r\n";
     var article = document.getElementsByTagName("article")[0];
-   
-    article.appendChild(document.createElement("br")); 
-    article.appendChild(document.createElement("br")); 
+
+    article.appendChild(document.createElement("br"));
+    article.appendChild(document.createElement("br"));
     article.appendChild(errorInfoBox);
+    let img = document.createElement("img")
+
+    img.src = "https://res.weread.qq.com/wrepub/epub_26392463_7";
+    article.appendChild(img);
 }
 function playLinkClick(srcElement) {
     var innerText = srcElement.innerText;

@@ -393,7 +393,7 @@ function createErrorInfoBox() {
     article.appendChild(document.createElement("br"));
     article.appendChild(document.createElement("br"));
     article.appendChild(errorInfoBox);
- 
+
 }
 function playLinkClick(srcElement) {
     var innerText = srcElement.innerText;
@@ -413,6 +413,25 @@ function playLinkClick(srcElement) {
         return true;
     }
     return false;
+}
+function loadQuestion() {
+    url = this.document.location.href.replace("/#/./", "/question/") + ".json";
+    $.getJSON(url, function (result) {
+        result.questions.forEach((d) => {
+            handlerDialogEnWord(d, "answer");
+        });
+        createQuestion(result.questions);
+        if (result.dialogs) {
+            result.dialogs.forEach((d) => {
+                d.answer.forEach((d) => {
+                    handlerDialogEnWord(d, "en");
+                });
+            });
+            createDialog(result.dialogs);
+        }
+        createNextLink();
+        createErrorInfoBox()
+    });
 }
 window.onload = function () {
     document.addEventListener("touchstart", function (event) {
@@ -438,6 +457,9 @@ window.onload = function () {
     document.addEventListener("gesturestart", function (event) {
         event.preventDefault();
     });
+
+    loadQuestion();
+
 };
 function reloadByUrl(url) {
     this.document.location.href = url;
@@ -457,33 +479,10 @@ onmousedown = function (event) {
     var url = event.srcElement.href;
     if (innerText == "下一节") {
         return reloadByUrl(url);
-    } else
-        if (innerText == "生成题库") {
-            event.preventDefault();
-            event.srcElement.remove();
-            url = url.replace("/#/./", "/");
-            $.getJSON(url, function (result) {
-                result.questions.forEach((d) => {
-                    handlerDialogEnWord(d, "answer");
-                });
-                createQuestion(result.questions);
-                if (result.dialogs) {
-                    result.dialogs.forEach((d) => {
-                        d.answer.forEach((d) => {
-                            handlerDialogEnWord(d, "en");
-                        });
-                    });
-                    createDialog(result.dialogs);
-                }
-                createNextLink();
-                createErrorInfoBox()
-            });
-            return false;
+    } else {
+        var rootTagName = event.srcElement.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.tagName;
+        if (rootTagName == "ASIDE") {
+            return reloadByUrl(url);
         }
-        else {
-            var rootTagName = event.srcElement.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.tagName;
-            if (rootTagName == "ASIDE") {
-                return reloadByUrl(url);
-            }
-        }
+    }
 };

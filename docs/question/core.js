@@ -71,6 +71,14 @@ function createDialog(data) {
     article.appendChild(ol);
 }
 
+function createHtmlContents(contents) {
+    var article = document.getElementsByTagName("article")[0];
+    contents.forEach((oneContent) => {
+        createOneHtmlContent(oneContent, article);
+    });
+}
+
+
 function createOneQuestion(d) {
     var li = document.createElement("li");
 
@@ -142,7 +150,51 @@ function createOneDialog(d) {
 
     return li;
 }
+function createOneHtmlContent(d, parent) {
 
+    if (d.tagName) {
+        d.imgSrc.forEach(url => {
+            var imgElement = document.createElement("IMG");
+            imgElement.src = url;
+            parent.appendChild(imgElement);
+        });
+        var element = document.createElement(d.tagName);
+        element.textContent = d.content;
+        parent.appendChild(element);
+    } else if (d.answer) {
+
+        handlerDialogEnWord(d, "answer");
+        var ul = document.createElement("ul");
+        var li_title = document.createElement("li");
+        li_title.textContent = d.title;
+        var li_QuestionParent = document.createElement("li");
+        var li_action = document.createElement("li");
+        var li_result = document.createElement("li");
+        var li_words = document.createElement("li");
+        var li_Question = document.createElement("div");
+        li_QuestionParent.appendChild(li_Question);
+        li_Question.className = "select-word";
+        createResetButton(li_action, li_Question, li_words);
+        createPlayLink(li_action, d.originalWords);
+
+        createWordButton(
+            d.words,
+            d.answer,
+            d.originalWords,
+            li_words,
+            li_Question,
+            li_result
+        );
+        ul.appendChild(li_title);
+        ul.appendChild(li_QuestionParent);
+        ul.appendChild(li_words);
+        ul.appendChild(li_action);
+        ul.appendChild(li_result);
+
+        parent.appendChild(ul);
+    }
+
+}
 function createWordButton(
     words,
     answer,
@@ -417,10 +469,17 @@ function playLinkClick(srcElement) {
 function loadQuestion() {
     url = this.document.location.href.replace("/#/./", "/question/") + ".json";
     $.getJSON(url, function (result) {
-        result.questions.forEach((d) => {
-            handlerDialogEnWord(d, "answer");
-        });
-        createQuestion(result.questions);
+        if (result.questions) {
+            result.questions.forEach((d) => {
+                handlerDialogEnWord(d, "answer");
+            });
+            createQuestion(result.questions);
+        }
+        if (result.contents) {
+            createHtmlContents(result.contents);
+        }
+
+
         if (result.dialogs) {
             result.dialogs.forEach((d) => {
                 d.answer.forEach((d) => {

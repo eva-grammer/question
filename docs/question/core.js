@@ -462,6 +462,7 @@ function createNextLink() {
 
         }
         console.log("未生成下一节");
+        createErrorInfoBox();
     }
 
 }
@@ -519,8 +520,7 @@ function loadQuestion() {
             });
             createDialog(result.dialogs);
         }
-        createNextLink();
-        createErrorInfoBox();
+        createNextLink(); 
     });
 }
 window.onload = function () {

@@ -448,7 +448,7 @@ function createNextLink() {
                 index += 1;
                 if (index < total) {
                     let nextLinkUrl = allLinks[index].href;
-                    let nextLink = document.createElement(a);
+                    let nextLink = document.createElement("a");
                     nextLink.href = nextLinkUrl;
                     nextLink.target = "_self";
                     nextLink.textContent = "下一节";

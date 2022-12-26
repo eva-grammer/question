@@ -432,18 +432,13 @@ function createNextLink() {
     var nav = document.getElementsByClassName("sidebar-nav")[0];
     let allLinks = nav.getElementsByTagName("a");
     if (allLinks.length == 0) {
-        console.log("再次生成下一节");
+
         setTimeout(v => createNextLink(), 500);
     } else {
         var total = allLinks.length;
         var currentUrl = document.location.href;
-        console.log(allLinks);
-        console.log(currentUrl);
-
-
         for (let index = 0; index < total; index++) {
             const element = allLinks[index];
-
             if (currentUrl == element.href) {
                 index += 1;
                 if (index < total) {
@@ -454,7 +449,6 @@ function createNextLink() {
                     nextLink.textContent = "下一节";
                     var article = document.getElementsByTagName("article")[0];
                     article.appendChild(nextLink);
-                    console.log("生成下一节");
                     createErrorInfoBox();
                     return;
                 }
@@ -462,8 +456,8 @@ function createNextLink() {
             }
 
         }
-        console.log("未生成下一节");
-       
+
+
     }
 
 }
@@ -521,7 +515,7 @@ function loadQuestion() {
             });
             createDialog(result.dialogs);
         }
-        createNextLink(); 
+        createNextLink();
     });
 }
 window.onload = function () {

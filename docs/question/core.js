@@ -429,21 +429,22 @@ function handlerDialogEnWord(d, propertyName) {
 }
 function createNextLink() {
     var nav = document.getElementsByClassName("sidebar-nav")[0];
-    var allLinks = nav.getElementsByTagName("a"); 
+    var allLinks = nav.getElementsByTagName("a");
     var total = allLinks.length;
     var currentUrl = document.location.href;
     console.log(allLinks);
     console.log(currentUrl);
 
-   
+
     for (let index = 0; index < total; index++) {
         const element = allLinks[index];
 
         if (currentUrl == element.href) {
             index += 1;
             if (index < total) {
-                let nextLink = allLinks[index];
-                nextLink.href = nextLink.href;
+                let nextLinkUrl = allLinks[index].href;
+                let nextLink = document.createElement(a);
+                nextLink.href = nextLinkUrl;
                 nextLink.target = "_self";
                 nextLink.textContent = "下一节";
                 var article = document.getElementsByTagName("article")[0];
@@ -454,7 +455,7 @@ function createNextLink() {
 
         }
 
-    } 
+    }
     console.log("未生成下一节");
 }
 

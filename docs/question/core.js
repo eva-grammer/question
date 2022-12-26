@@ -214,6 +214,7 @@ function createOneHtmlContent(d, parent) {
         li_a.textContent = "播放";
         li_word.appendChild(li_a);
         li_word.appendChild(document.createTextNode(d.hanyi));
+        parent.appendChild(li_word);
     }
 
 }

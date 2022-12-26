@@ -196,10 +196,24 @@ function createOneHtmlContent(d, parent) {
         ul.appendChild(li_words);
         ul.appendChild(li_action);
         ul.appendChild(li_result);
-        var li_describ = document.createElement("li");
-        li_describ.textContent = d.describe;
-        ul.appendChild(li_describ);
+        if (d.describe) {
+            var li_describe = document.createElement("li");
+            li_describe.textContent = d.describe;
+            ul.appendChild(li_describe);
+        }
         parent.appendChild(ul);
+    } else if (d.yinbiao) {
+        var li_word = document.createElement("p");
+        var li_strong = document.createElement("strong");
+        li_strong.textContent = d.word;
+        li_word.appendChild(li_strong);
+        li_word.appendChild(d.yinbiao);
+
+        var li_a = document.createElement("a");
+        li_a.href = "https://dict.youdao.com/dictvoice?audio=" + d.word + "&type=2";
+        li_a.textContent = "播放";
+        li_word.appendChild(li_a);
+        li_word.appendChild(d.hanyi);
     }
 
 }

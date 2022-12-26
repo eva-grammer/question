@@ -455,6 +455,7 @@ function createNextLink() {
                     var article = document.getElementsByTagName("article")[0];
                     article.appendChild(nextLink);
                     console.log("生成下一节");
+                    createErrorInfoBox();
                     return;
                 }
 
@@ -462,7 +463,7 @@ function createNextLink() {
 
         }
         console.log("未生成下一节");
-        createErrorInfoBox();
+       
     }
 
 }

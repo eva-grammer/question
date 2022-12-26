@@ -207,13 +207,13 @@ function createOneHtmlContent(d, parent) {
         var li_strong = document.createElement("strong");
         li_strong.textContent = d.word;
         li_word.appendChild(li_strong);
-        li_word.appendChild(d.yinbiao);
+        li_word.appendChild(document.createTextNode(d.yinbiao));
 
         var li_a = document.createElement("a");
         li_a.href = "https://dict.youdao.com/dictvoice?audio=" + d.word + "&type=2";
         li_a.textContent = "播放";
         li_word.appendChild(li_a);
-        li_word.appendChild(d.hanyi);
+        li_word.appendChild(document.createTextNode(d.hanyi));
     }
 
 }

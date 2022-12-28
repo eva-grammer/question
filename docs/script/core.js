@@ -257,8 +257,8 @@ function createWordButton(
 
     $(li_Question).sortable({
         revert: true,
-        out: function (event, ui) { console.log("out ",event,ui)},
-        update: function (event, ui) {console.log("update ",event,ui) }
+        out: function (event, ui) { console.log("out ", event, ui) },
+        update: function (event, ui) { console.log("update ", event, ui); check(words.length, answer, li_Question, li_result, originalWords); }
     });
 
     words.forEach((word) => {

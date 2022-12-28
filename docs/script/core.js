@@ -254,14 +254,13 @@ function createWordButton(
     li_Question,
     li_result
 ) {
-    $(parent).draggable({
-        connectToSortable: li_Question,
-        helper: "clone",
-        revert: "invalid"
-    });
+
     $(li_Question).sortable({
-        revert: true
+        revert: true,
+        out: function (event, ui) { console.log("out ",event,ui)},
+        update: function (event, ui) {console.log("update ",event,ui) }
     });
+
     words.forEach((word) => {
         let button = document.createElement("button");
         button.innerText = word;

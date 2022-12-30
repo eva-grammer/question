@@ -257,14 +257,6 @@ function createWordButton(
     li_result
 ) {
 
-    $(li_Question).sortable({
-        cursor: "move",
-
-        stop: function (event, ui) {
-            check(words.length, answer, li_Question, li_result, originalWords);
-        }
-    });
-
     words.forEach((word) => {
         let button = document.createElement("button");
         button.id = guid();
@@ -298,6 +290,34 @@ function createWordButton(
         };
         parent.appendChild(button);
     });
+}
+function draggableHandle(li_Question) {
+    $(li_Question).find("span").draggable({
+        containment: "parent",
+        cursor: "move",
+        stop: function (event, ui) {
+            console.log("stop ", event, ui);
+            ui.helper.removeClass("move");
+            ui.helper.html(ui.helper.attr("oldValue"));
+            ui.helper.offset({ top: undefined, left: undefined });
+        },
+        start: function (event, ui) {
+            ui.helper.addClass("move");
+            ui.helper.attr("oldValue", ui.helper.html());
+            ui.helper.empty()
+            console.log("stop ", event, ui);
+        },
+
+    }).droppable({
+        drop: function (event, ui) {
+            ui.helper.removeClass("move");
+            ui.helper.html(ui.helper.attr("oldValue"));
+            console.log("drop ", event, ui);
+            ui.helper.offset({ top: undefined, left: undefined });
+            check(words.length, answer, li_Question, li_result, originalWords);
+        },
+    });
+
 }
 function hideButtons(li_Question, buttonsParent) {
     const buttonCount = buttonsParent.childElementCount;
@@ -574,7 +594,7 @@ window.onload = function () {
         function (event) {
             let now = new Date().getTime();
             if (now - lastTouchEnd <= 300) {
-                doubleClickWord(event) 
+                doubleClickWord(event)
                 event.preventDefault();
             }
             lastTouchEnd = now;
@@ -596,8 +616,8 @@ function doubleClickWord(e) {
     let buttonId = "#" + e.target.relationId
     $(buttonId).removeClass("select");
     $(e.target).remove();
-    let parent=$(e.target).parent().parent().next(); 
-    hideButtons(e.delegateTarget,parent[0]);
+    let parent = $(e.target).parent().parent().next();
+    hideButtons(e.delegateTarget, parent[0]);
 }
 
 function reloadByUrl(url) {
@@ -648,7 +668,7 @@ onmousedown = function (event) {
 
     $.extend(proto, {
         _getElementToBind: function () {
-            const el = this.element; 
+            const el = this.element;
             return el;
         },
 

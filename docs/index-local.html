@@ -25,6 +25,7 @@
         background: pink;
         cursor: pointer;
         max-width: 1px;
+        max-height: 1px;
         overflow: hidden;
       }
     </style>
@@ -307,7 +308,14 @@
     </article>
 
     <script>
-      $(".select-word").sortable({
+      $(".select-word span").droppable({
+        drop: function (event,ui) {
+          ui.helper.removeClass("move");
+          ui.helper.html( ui.helper.attr("oldValue"));
+          console.log("drop ", event, ui);
+        },
+      });
+      $(".select-word span").draggable({
         cursor: "move",
 
         out: function (event, ui) {
@@ -319,11 +327,14 @@
         },
         stop: function (event, ui) {
           console.log("stop ", event, ui);
-
-          $(ui.item).removeClass("move");
+          ui.helper.removeClass("move");
+          ui.helper.html( ui.helper.attr("oldValue"));
+         
         },
         start: function (event, ui) {
-          $(ui.item).addClass("move");
+          ui.helper.addClass("move");
+          ui.helper.attr("oldValue", ui.helper.html());
+          ui.helper.empty()
           console.log("stop ", event, ui);
         },
       });
@@ -338,7 +349,6 @@
       $(".select-word").delegate("span", "dblclick", function (e) {
         console.log(e);
       });
-     
     </script>
   </body>
 </html>

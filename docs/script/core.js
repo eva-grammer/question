@@ -247,7 +247,7 @@ function createOneHtmlContent(d, parent) {
 
 }
 
-
+let wordNumber = 0;
 function createWordButton(
     words,
     answer,
@@ -256,7 +256,8 @@ function createWordButton(
     li_Question,
     li_result
 ) {
-
+    wordNumber++;
+    $(li_Question).attr("wordNumber", wordNumber)
     words.forEach((word) => {
         let button = document.createElement("button");
         button.id = guid();
@@ -439,8 +440,11 @@ function check(
     if (isSuccess) {
         li_result.textContent = "正确";
         li_result.className = "success";
+        if ($(resultElements).attr("wordNumber") * 1 == wordNumber) {
+            tick();
+        }
         playAudion(successAudio);
-        tick();
+
         setTimeout(() => {
             let href =
                 "https://dict.youdao.com/dictvoice?audio=" +

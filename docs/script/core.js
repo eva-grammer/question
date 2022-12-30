@@ -374,23 +374,9 @@ function createResetButton(liparent, li_Question, li_words) {
     let btn_reset = document.createElement("button");
     btn_reset.textContent = "重置";
     btn_reset.onclick = function () {
-        li_Question.lastButtons.forEach((element) => {
-            element.className = "";
-            element.oldValue = undefined;
-        });
-        li_Question.lastButtons = [];
-        for (
-            let index = li_Question.childElementCount - 1;
-            index >= 0;
-            index--
-        ) {
-            const element = li_Question.children[index];
-            element.remove();
-        }
-        for (let index = 0; index < li_words.childElementCount; index++) {
-            const element = li_words.children[index];
-            element.oldValue = undefined;
-        }
+        $(li_Question).first().empty();
+        $(li_words).first().find("button").removeClass("select").show();
+
     };
     liparent.appendChild(btn_reset);
 }
@@ -642,3 +628,70 @@ onmousedown = function (event) {
         }
     }
 };
+(function ($) {
+    $.support.touch = true; // typeof Touch === 'object';
+
+    if (!$.support.touch) {
+        return;
+    }
+
+    var proto = $.ui.mouse.prototype,
+        _mouseInit = proto._mouseInit;
+
+    $.extend(proto, {
+        _getElementToBind: function () {
+            var el = this.element;
+            if (this.widgetName == "sortable") {
+                console.log
+            }
+            return el;
+        },
+
+        _mouseInit: function () {
+            this._getElementToBind().bind("touchstart." + this.widgetName, $.proxy(this, "_touchStart"));
+            _mouseInit.apply(this, arguments);
+        },
+
+        _touchStart: function (event) {
+            if (event.originalEvent.targetTouches.length != 1) {
+                return false;
+            }
+
+            if (!this._mouseCapture(event, false)) { // protects things like the "handle" option on sortable
+                return true;
+            }
+
+            this.element
+                .bind("touchmove." + this.widgetName, $.proxy(this, "_touchMove"))
+                .bind("touchend." + this.widgetName, $.proxy(this, "_touchEnd"));
+
+            this._modifyEvent(event);
+
+            $(document).trigger($.Event("mouseup")); // reset mouseHandled flag in ui.mouse
+            this._mouseDown(event);
+
+            return false;
+        },
+
+        _touchMove: function (event) {
+            this._modifyEvent(event);
+            this._mouseMove(event);
+        },
+
+        _touchEnd: function (event) {
+            this.element
+                .unbind("touchmove." + this.widgetName)
+                .unbind("touchend." + this.widgetName);
+            this._mouseUp(event);
+        },
+
+        _modifyEvent: function (event) {
+            event.which = 1;
+            var target = event.originalEvent.targetTouches[0];
+            event.pageX = target.clientX;
+            event.pageY = target.clientY;
+        }
+
+    });
+
+})(jQuery);

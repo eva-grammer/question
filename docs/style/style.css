@@ -22,6 +22,7 @@ li div {
 
 .select-word span {
     color: red;
+    min-width: 10px;
 }
 
 .error {

@@ -28,10 +28,23 @@
         max-height: 1px;
         overflow: hidden;
       }
+
+      .note {
+        padding: 25px;
+        background: #eee;
+        border-radius: 5px;
+        margin: 15px;
+       
+        font-weight: bold;
+      }
     </style>
   </head>
   <body>
     <article class="markdown-section" id="main">
+      <ol class="note">
+        <li>可以拖动已经选择的单词到另一个单词上面，以调整顺序</li>
+        <li>双击已选择的单词，可以删除掉</li>
+      </ol>
       <h1 id="第一节-单数代词及冠词的用法">
         <a
           href="#/./f001?id=%e7%ac%ac%e4%b8%80%e8%8a%82-%e5%8d%95%e6%95%b0%e4%bb%a3%e8%af%8d%e5%8f%8a%e5%86%a0%e8%af%8d%e7%9a%84%e7%94%a8%e6%b3%95"
@@ -308,12 +321,11 @@
     </article>
 
     <script>
-        function adddroppable(){
-
+      function adddroppable() {
         $(".select-word span").droppable({
-          drop: function (event,ui) {
+          drop: function (event, ui) {
             ui.helper.removeClass("move");
-            ui.helper.html( ui.helper.attr("oldValue"));
+            ui.helper.html(ui.helper.attr("oldValue"));
             console.log("drop ", event, ui);
           },
         });
@@ -330,28 +342,27 @@
           stop: function (event, ui) {
             console.log("stop ", event, ui);
             ui.helper.removeClass("move");
-            ui.helper.html( ui.helper.attr("oldValue"));
-
+            ui.helper.html(ui.helper.attr("oldValue"));
           },
           start: function (event, ui) {
             ui.helper.addClass("move");
             ui.helper.attr("oldValue", ui.helper.html());
-            ui.helper.empty()
+            ui.helper.empty();
             console.log("stop ", event, ui);
           },
         });
       }
-        $("button").click(function (event) {
-          var word = event.target.textContent;
-          $($(event.target.parentElement).prev().children(0)).append(
-            "<span class='selected-word'>" + word + "</span>"
-          );
-          adddroppable();
-        });
+      $("button").click(function (event) {
+        var word = event.target.textContent;
+        $($(event.target.parentElement).prev().children(0)).append(
+          "<span class='selected-word'>" + word + "</span>"
+        );
+        adddroppable();
+      });
 
-        $(".select-word").delegate("span", "dblclick", function (e) {
-          console.log(e);
-        });
+      $(".select-word").delegate("span", "dblclick", function (e) {
+        console.log(e);
+      });
     </script>
   </body>
 </html>

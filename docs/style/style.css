@@ -47,4 +47,13 @@ li div {
     max-width: 1px;
     max-height: 1px;
     overflow: hidden;
-}
+} 
+
+.note {
+    padding: 25px;
+    background: #eee;
+    border-radius: 5px;
+    margin: 15px;
+   
+    font-weight: bold;
+  }

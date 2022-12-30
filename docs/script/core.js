@@ -284,7 +284,7 @@ function createWordButton(
                 li_word.id = button.relationId;
                 li_word.relationId = button.id;
                 li_Question.appendChild(li_word);
-                draggableHandle(li_word,words,
+                draggableHandle(li_word, words,
                     answer,
                     originalWords,
                     li_Question,
@@ -292,14 +292,14 @@ function createWordButton(
                 check(words.length, answer, li_Question, li_result, originalWords);
             }
             hideButtons(li_Question, parent);
-           
+
         };
         parent.appendChild(button);
     });
-   
+
 
 }
-function draggableHandle(li_word,words,
+function draggableHandle(li_word, words,
     answer,
     originalWords,
     li_Question,
@@ -565,6 +565,7 @@ function playLinkClick(srcElement) {
     return false;
 }
 function loadQuestion() {
+    createNote();
     let url = this.document.location.href.replace("/#/./", "/question/") + ".json";
     $.getJSON(url, function (result) {
         if (result.questions) {
@@ -623,16 +624,27 @@ window.onload = function () {
 
 
 };
+function createNote() {
+    const olNote = document.createElement("ol");
+    const li1 = document.createElement("li");
+    li1.textContent = "可以拖动已经选择的单词到另一个单词上面，以调整顺序。";
+    const li2 = document.createElement("li");
+    li2.textContent = "双击已选择的单词，可以删除掉。";
+    olNote.appendChild(li1);
+    olNote.appendChild(li2);
+    let article = document.getElementsByTagName("article")[0];
 
+    article.appendChild(olNote);
+}
 function doubleClickWord(e) {
 
     let buttonId = "#" + e.target.relationId
-    $(buttonId).removeClass("select"); 
+    $(buttonId).removeClass("select");
     let parent = $(e.target).parent().parent().next();
-    let parentQuestion=$(e.target).parent()[0];
+    let parentQuestion = $(e.target).parent()[0];
     $(e.target).remove();
     hideButtons(parentQuestion, parent[0]);
- 
+
 }
 
 function reloadByUrl(url) {

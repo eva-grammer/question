@@ -569,7 +569,7 @@ function loadQuestion() {
         }
         createNextLink();
         $(".select-word").delegate("span", "dblclick", function (e) {
-            let buttonId = "#" + e.delegateTarget.relationId
+            let buttonId = "#" + e.target.relationId
             $(buttonId).removeClass("select");
             hideButtons(e.delegateTarget, $(e.delegateTarget).parent().next()[0]);
 

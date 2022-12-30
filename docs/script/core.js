@@ -629,8 +629,9 @@ function doubleClickWord(e) {
     let buttonId = "#" + e.target.relationId
     $(buttonId).removeClass("select"); 
     let parent = $(e.target).parent().parent().next();
+    let parentQuestion=$(e.target).parent()[0];
     $(e.target).remove();
-    hideButtons(e.delegateTarget, parent[0]);
+    hideButtons(parentQuestion, parent[0]);
  
 }
 

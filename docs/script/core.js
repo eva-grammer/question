@@ -555,10 +555,7 @@ function loadQuestion() {
         }
         createNextLink();
         $(".select-word").delegate("span", "dblclick", function (e) {
-            let buttonId = "#" + e.target.relationId
-            $(buttonId).removeClass("select");
-            $(e.target).remove();
-            hideButtons(e.delegateTarget, $(e.delegateTarget).parent().next()[0]);
+            doubleClickWord(e);
 
         });
     });
@@ -577,6 +574,7 @@ window.onload = function () {
         function (event) {
             let now = new Date().getTime();
             if (now - lastTouchEnd <= 300) {
+                doubleClickWord(event) 
                 event.preventDefault();
             }
             lastTouchEnd = now;
@@ -592,6 +590,15 @@ window.onload = function () {
 
 
 };
+
+function doubleClickWord(e) {
+
+    let buttonId = "#" + e.target.relationId
+    $(buttonId).removeClass("select");
+    $(e.target).remove();
+    hideButtons(e.delegateTarget, $(e.delegateTarget).parent().next()[0]);
+}
+
 function reloadByUrl(url) {
     this.document.location.href = url;
     this.document.location.reload();
@@ -640,10 +647,7 @@ onmousedown = function (event) {
 
     $.extend(proto, {
         _getElementToBind: function () {
-            var el = this.element;
-            if (this.widgetName == "sortable") {
-                console.log
-            }
+            const el = this.element; 
             return el;
         },
 

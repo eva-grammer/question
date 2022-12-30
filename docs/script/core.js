@@ -627,10 +627,11 @@ window.onload = function () {
 function doubleClickWord(e) {
 
     let buttonId = "#" + e.target.relationId
-    $(buttonId).removeClass("select");
-    $(e.target).remove();
+    $(buttonId).removeClass("select"); 
     let parent = $(e.target).parent().parent().next();
+    $(e.target).remove();
     hideButtons(e.delegateTarget, parent[0]);
+ 
 }
 
 function reloadByUrl(url) {

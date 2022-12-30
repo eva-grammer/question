@@ -300,7 +300,12 @@ function createWordButton(
     });
 }
 function hideButtons(li_Question, buttonsParent) {
-    buttonsParent.children.forEach(v => $(v).show());
+    const buttonCount=buttonsParent.childElementCount;
+    for (let index = 0; index < buttonCount; index++) {
+        const element = buttonsParent.children[index]; 
+            $(element).show(); 
+    }
+   
     const wordsCount = li_Question.childElementCount;
     for (let index = 0; index < wordsCount; index++) {
         const element = li_Question.children[index];

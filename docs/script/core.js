@@ -441,7 +441,7 @@ function check(
         li_result.textContent = "正确";
         li_result.className = "success";
         if ($(resultElements).attr("wordNumber") * 1 == wordNumber) {
-            tick();
+            startFire();
         }
         playAudion(successAudio);
 

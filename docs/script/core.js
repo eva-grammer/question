@@ -144,6 +144,7 @@ function createOneQuestion(d) {
 
     return li;
 }
+
 function createOneDialog(d) {
     let li = document.createElement("li");
 
@@ -182,6 +183,7 @@ function createOneDialog(d) {
 
     return li;
 }
+
 function createOneHtmlContent(d, parent) {
 
     if (d.tagName) {
@@ -256,53 +258,58 @@ function createWordButton(
 ) {
 
     $(li_Question).sortable({
-        revert: true,
-        out: function (event, ui) { console.log("out ", event, ui) },
-        update: function (event, ui) { console.log("update ", event, ui); check(words.length, answer, li_Question, li_result, originalWords); }
+        cursor: "move",
+
+        stop: function (event, ui) {
+            check(words.length, answer, li_Question, li_result, originalWords);
+        }
     });
 
     words.forEach((word) => {
         let button = document.createElement("button");
+        button.id = guid();
         button.innerText = word;
         button.onclick = function () {
-            let audio = clickAudio[currentPlayNumber];
 
+            let audio = clickAudio[currentPlayNumber];
             if (currentPlayNumber == maxAudioNumber - 1) {
                 currentPlayNumber = 0;
             } else {
                 currentPlayNumber++;
             }
             playAudion(audio);
-            if (li_Question.childElementCount == 0) {
-                li_Question.lastButtons = [];
-            }
-            if (button.oldValue === undefined) {
+            const isSelected = $(button).hasClass("select");
+            if (isSelected) {
+                $(button).removeClass("select");
+                $("#" + button.relationId).remove();
+            } else {
+                $(button).addClass("select");
                 let li_word = document.createElement("span");
                 li_word.textContent = word;
                 if (!button.relationId) {
                     button.relationId = guid();
                 }
                 li_word.id = button.relationId;
-                button.oldValue = word;
-                button.className = "select";
-                li_Question.lastButtons.push(button);
+                li_word.relationId = button.id;
                 li_Question.appendChild(li_word);
-            } else {
-                let lastButton =
-                    li_Question.lastButtons[li_Question.lastButtons.length - 1];
-                if (lastButton == button) {
-                    li_Question.lastButtons.length -= 1;
-                    button.oldValue = undefined;
-                    button.className = "";
-                    let relation = document.getElementById(button.relationId);
-                    if (relation) relation.remove();
-                }
+                check(words.length, answer, li_Question, li_result, originalWords);
             }
-
-            check(words.length, answer, li_Question, li_result, originalWords);
+            hideButtons(li_Question, parent);
         };
         parent.appendChild(button);
     });
+}
+function hideButtons(li_Question, buttonsParent) {
+    buttonsParent.children.forEach(v => $(v).show());
+    const wordsCount = li_Question.childElementCount;
+    for (let index = 0; index < wordsCount; index++) {
+        const element = li_Question.children[index];
+        if (index < wordsCount - 1) {
+            $("#" + element.relationId).hide();
+        }
+
+    }
+
 }
 
 function playAudion(audio, onError) {
@@ -322,6 +329,7 @@ function playAudion(audio, onError) {
         });
     }
 }
+
 function playAudionWithUrl(url, loop, onError) {
     let audio = null;
     if (loop) {
@@ -346,6 +354,7 @@ function playAudionWithUrl(url, loop, onError) {
     }
     playAudion(audio, onError);
 }
+
 function createPlayLink(liparent, words) {
     let link_play = document.createElement("a");
     link_play.textContent = "播放";
@@ -355,6 +364,7 @@ function createPlayLink(liparent, words) {
         "&le=eng&le=eng&type=2";
     liparent.appendChild(link_play);
 }
+
 function createResetButton(liparent, li_Question, li_words) {
     let btn_reset = document.createElement("button");
     btn_reset.textContent = "重置";
@@ -495,12 +505,8 @@ function createNextLink() {
                 }
 
             }
-
         }
-
-
     }
-
 }
 
 function createErrorInfoBox() {
@@ -535,7 +541,7 @@ function playLinkClick(srcElement) {
     return false;
 }
 function loadQuestion() {
-    url = this.document.location.href.replace("/#/./", "/question/") + ".json";
+    let url = this.document.location.href.replace("/#/./", "/question/") + ".json";
     $.getJSON(url, function (result) {
         if (result.questions) {
             result.questions.forEach((d) => {
@@ -586,6 +592,12 @@ window.onload = function () {
 
     loadQuestion();
 
+    $(".select-word").delegate("span", "dblclick", function (e) {
+        let buttonId = "#" + e.delegateTarget.relationId
+        $(buttonId).removeClass("select");
+        hideButtons(e.delegateTarget, $(e.delegateTarget).parent().next()[0]);
+
+    });
 };
 function reloadByUrl(url) {
     this.document.location.href = url;

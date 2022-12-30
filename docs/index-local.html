@@ -10,24 +10,335 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <link rel="stylesheet" href="../local/vue.css" />
-    
+
     <link rel="stylesheet" href="style/jquery-ui.min.css" />
     <link rel="stylesheet" href="style/style.css?v=4" />
     <script src="script/jquery.min.js"></script>
     <script src="script/jquery-ui.min.js"></script>
+    <style>
+      .select-word span {
+        border: 1px solid red;
+        padding: 10px;
+        display: inline-block;
+      }
+      .move {
+        background: pink;
+        cursor: pointer;
+        max-width: 1px;
+        overflow: hidden;
+      }
+    </style>
   </head>
   <body>
-    <div id="app"></div>
+    <article class="markdown-section" id="main">
+      <h1 id="第一节-单数代词及冠词的用法">
+        <a
+          href="#/./f001?id=%e7%ac%ac%e4%b8%80%e8%8a%82-%e5%8d%95%e6%95%b0%e4%bb%a3%e8%af%8d%e5%8f%8a%e5%86%a0%e8%af%8d%e7%9a%84%e7%94%a8%e6%b3%95"
+          data-id="第一节-单数代词及冠词的用法"
+          class="anchor"
+          ><span>第一节 单数代词及冠词的用法</span></a
+        >
+      </h1>
+      <h4>句型练习</h4>
+      <ol>
+        <li>
+          <ul>
+            <li>我是一个男孩（boy）。</li>
+            <li>
+              <div class="select-word ui-sortable">
+                <span class="selected-word">I</span
+                ><span class="selected-word">am</span
+                ><span class="selected-word">a</span
+                ><span class="selected-word">boy.</span>
+              </div>
+            </li>
+            <li>
+              <button>boy.</button><button>a</button><button>am</button
+              ><button>I</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=I+am+a+boy.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>你是一位老师（teacher）。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>You</button><button>are</button><button>teacher.</button
+              ><button>a</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=You+are+a+teacher.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>他是一个学生（student）。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>is</button><button>He</button><button>a</button
+              ><button>student.</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=He+is+a+student.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>她是一位医生（doctor）。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>doctor.</button><button>is</button><button>a</button
+              ><button>She</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=She+is+a+doctor.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>它是一本书（book）。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>book.</button><button>a</button><button>is</button
+              ><button>It</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=It+is+a+book.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>它是一只狗（dog）。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>dog.</button><button>is</button><button>a</button
+              ><button>It</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=It+is+a+dog.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>这个是一把椅子（chair）。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>is</button><button>chair.</button><button>This</button
+              ><button>a</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=This+is+a+chair.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>那个是一辆车（car）。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>car.</button><button>a</button><button>is</button
+              ><button>That</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=That+is+a+car.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>它是一个苹果（an apple）。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>is</button><button>It</button><button>apple.</button
+              ><button>an</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=It+is+an+apple.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>这个是一个苹果。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>apple.</button><button>is</button><button>This</button
+              ><button>an</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=This+is+an+apple.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>那个是一个苹果。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>is</button><button>apple.</button><button>That</button
+              ><button>an</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=That+is+an+apple.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>它是一架飞机（an airplane）。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>It</button><button>airplane.</button><button>is</button
+              ><button>an</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=It+is+an+airplane.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>这个是一架飞机。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>airplane.</button><button>an</button><button>is</button
+              ><button>This</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=This+is+an+airplane.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+        <li>
+          <ul>
+            <li>那个是一架飞机。</li>
+            <li><div class="select-word ui-sortable"></div></li>
+            <li>
+              <button>is</button><button>That</button><button>airplane.</button
+              ><button>an</button>
+            </li>
+            <li>
+              <button>重置</button
+              ><a
+                href="https://dict.youdao.com/dictvoice?audio=That+is+an+airplane.&amp;le=eng&amp;le=eng&amp;type=2"
+                >播放</a
+              >
+            </li>
+            <li></li>
+          </ul>
+        </li>
+      </ol>
+      <a href="https://eva-grammer.github.io/question/#/./f002" target="_self"
+        >下一节</a
+      ><br /><br /><textarea rows="10"></textarea>
+    </article>
+
     <script>
-      window.$docsify = {
-        name: "",
-        repo: "",
-        loadSidebar: true,
-        auto2top: true,
-        autoHeader: true,
-      };
+      $(".select-word").sortable({
+        cursor: "move",
+
+        out: function (event, ui) {
+          console.log("out ", event, ui);
+        },
+        update: function (event, ui) {
+          console.log("update ", event, ui);
+          // check(words.length, answer, li_Question, li_result, originalWords);
+        },
+        stop: function (event, ui) {
+          console.log("stop ", event, ui);
+
+          $(ui.item).removeClass("move");
+        },
+        start: function (event, ui) {
+          $(ui.item).addClass("move");
+          console.log("stop ", event, ui);
+        },
+      });
+
+      $("button").click(function (event) {
+        var word = event.target.textContent;
+        $($(event.target.parentElement).prev().children(0)).append(
+          "<span class='selected-word'>" + word + "</span>"
+        );
+      });
+
+      $(".select-word").delegate("span", "dblclick", function (e) {
+        console.log(e);
+      });
+     
     </script>
-    <script src="../local/docsify.min.js"></script> 
-    <script src="script/core.js?v=10"></script>
   </body>
 </html>

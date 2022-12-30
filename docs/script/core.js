@@ -311,7 +311,7 @@ function draggableHandle(li_word,words,
             console.log("stop ", event, ui);
             ui.helper.removeClass("move");
             ui.helper.html(ui.helper.attr("oldValue"));
-            ui.helper.offset({ top: undefined, left: undefined });
+            ui.helper.css({ top: 0, left: 0 })
         },
         start: function (event, ui) {
             ui.helper.addClass("move");
@@ -325,7 +325,8 @@ function draggableHandle(li_word,words,
             ui.helper.removeClass("move");
             ui.helper.html(ui.helper.attr("oldValue"));
             console.log("drop ", event, ui);
-            ui.helper.offset({ top: undefined, left: undefined });
+            ui.helper.css({ top: 0, left: 0 })
+            ui.helper.insertBefore(event.target)
             check(words.length, answer, li_Question, li_result, originalWords);
         },
     });

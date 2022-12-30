@@ -141,7 +141,7 @@ function createOneQuestion(d) {
     ul.appendChild(li_words);
     ul.appendChild(li_action);
     ul.appendChild(li_result);
-   
+
     return li;
 }
 
@@ -290,10 +290,19 @@ function createWordButton(
         };
         parent.appendChild(button);
     });
-    draggableHandle(li_Question);
+    draggableHandle(words,
+        answer,
+        originalWords,
+        li_Question,
+        li_result);
+
 }
-function draggableHandle(li_Question) {
-    $(li_Question).find("span").draggable({
+function draggableHandle(words,
+    answer,
+    originalWords,
+    li_Question,
+    li_result) {
+    $(".select-word span").draggable({
         containment: "parent",
         cursor: "move",
         stop: function (event, ui) {

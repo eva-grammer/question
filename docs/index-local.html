@@ -308,47 +308,50 @@
     </article>
 
     <script>
-      $(".select-word span").droppable({
-        drop: function (event,ui) {
-          ui.helper.removeClass("move");
-          ui.helper.html( ui.helper.attr("oldValue"));
-          console.log("drop ", event, ui);
-        },
-      });
-      $(".select-word span").draggable({
-        cursor: "move",
+        function adddroppable(){
 
-        out: function (event, ui) {
-          console.log("out ", event, ui);
-        },
-        update: function (event, ui) {
-          console.log("update ", event, ui);
-          // check(words.length, answer, li_Question, li_result, originalWords);
-        },
-        stop: function (event, ui) {
-          console.log("stop ", event, ui);
-          ui.helper.removeClass("move");
-          ui.helper.html( ui.helper.attr("oldValue"));
-         
-        },
-        start: function (event, ui) {
-          ui.helper.addClass("move");
-          ui.helper.attr("oldValue", ui.helper.html());
-          ui.helper.empty()
-          console.log("stop ", event, ui);
-        },
-      });
+        $(".select-word span").droppable({
+          drop: function (event,ui) {
+            ui.helper.removeClass("move");
+            ui.helper.html( ui.helper.attr("oldValue"));
+            console.log("drop ", event, ui);
+          },
+        });
+        $(".select-word span").draggable({
+          cursor: "move",
 
-      $("button").click(function (event) {
-        var word = event.target.textContent;
-        $($(event.target.parentElement).prev().children(0)).append(
-          "<span class='selected-word'>" + word + "</span>"
-        );
-      });
+          out: function (event, ui) {
+            console.log("out ", event, ui);
+          },
+          update: function (event, ui) {
+            console.log("update ", event, ui);
+            // check(words.length, answer, li_Question, li_result, originalWords);
+          },
+          stop: function (event, ui) {
+            console.log("stop ", event, ui);
+            ui.helper.removeClass("move");
+            ui.helper.html( ui.helper.attr("oldValue"));
 
-      $(".select-word").delegate("span", "dblclick", function (e) {
-        console.log(e);
-      });
+          },
+          start: function (event, ui) {
+            ui.helper.addClass("move");
+            ui.helper.attr("oldValue", ui.helper.html());
+            ui.helper.empty()
+            console.log("stop ", event, ui);
+          },
+        });
+      }
+        $("button").click(function (event) {
+          var word = event.target.textContent;
+          $($(event.target.parentElement).prev().children(0)).append(
+            "<span class='selected-word'>" + word + "</span>"
+          );
+          adddroppable();
+        });
+
+        $(".select-word").delegate("span", "dblclick", function (e) {
+          console.log(e);
+        });
     </script>
   </body>
 </html>

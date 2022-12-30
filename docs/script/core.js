@@ -440,6 +440,7 @@ function check(
         li_result.textContent = "正确";
         li_result.className = "success";
         playAudion(successAudio);
+        tick();
         setTimeout(() => {
             let href =
                 "https://dict.youdao.com/dictvoice?audio=" +
@@ -572,7 +573,7 @@ function loadQuestion() {
             result.questions.forEach((d) => {
                 handlerDialogEnWord(d, "answer");
             });
-             createNote();
+            createNote();
             createQuestion(result.questions);
         }
         if (result.contents) {
@@ -627,7 +628,7 @@ window.onload = function () {
 };
 function createNote() {
     const olNote = document.createElement("ol");
-    olNote.className="note";
+    olNote.className = "note";
     const li1 = document.createElement("li");
     li1.textContent = "可以拖动已经选择的单词到另一个单词上面，以调整顺序。";
     const li2 = document.createElement("li");

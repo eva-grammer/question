@@ -284,25 +284,27 @@ function createWordButton(
                 li_word.id = button.relationId;
                 li_word.relationId = button.id;
                 li_Question.appendChild(li_word);
+                draggableHandle(li_word,words,
+                    answer,
+                    originalWords,
+                    li_Question,
+                    li_result);
                 check(words.length, answer, li_Question, li_result, originalWords);
             }
             hideButtons(li_Question, parent);
+           
         };
         parent.appendChild(button);
     });
-    draggableHandle(words,
-        answer,
-        originalWords,
-        li_Question,
-        li_result);
+   
 
 }
-function draggableHandle(words,
+function draggableHandle(li_word,words,
     answer,
     originalWords,
     li_Question,
     li_result) {
-    $(".select-word span").draggable({
+    $(li_word).draggable({
         containment: "parent",
         cursor: "move",
         stop: function (event, ui) {

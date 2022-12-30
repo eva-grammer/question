@@ -626,6 +626,7 @@ window.onload = function () {
 };
 function createNote() {
     const olNote = document.createElement("ol");
+    olNote.className="note";
     const li1 = document.createElement("li");
     li1.textContent = "可以拖动已经选择的单词到另一个单词上面，以调整顺序。";
     const li2 = document.createElement("li");

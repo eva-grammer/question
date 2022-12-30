@@ -300,12 +300,12 @@ function createWordButton(
     });
 }
 function hideButtons(li_Question, buttonsParent) {
-    const buttonCount=buttonsParent.childElementCount;
+    const buttonCount = buttonsParent.childElementCount;
     for (let index = 0; index < buttonCount; index++) {
-        const element = buttonsParent.children[index]; 
-            $(element).show(); 
+        const element = buttonsParent.children[index];
+        $(element).show();
     }
-   
+
     const wordsCount = li_Question.childElementCount;
     for (let index = 0; index < wordsCount; index++) {
         const element = li_Question.children[index];
@@ -568,6 +568,12 @@ function loadQuestion() {
             createDialog(result.dialogs);
         }
         createNextLink();
+        $(".select-word").delegate("span", "dblclick", function (e) {
+            let buttonId = "#" + e.delegateTarget.relationId
+            $(buttonId).removeClass("select");
+            hideButtons(e.delegateTarget, $(e.delegateTarget).parent().next()[0]);
+
+        });
     });
 }
 window.onload = function () {
@@ -597,12 +603,7 @@ window.onload = function () {
 
     loadQuestion();
 
-    $(".select-word").delegate("span", "dblclick", function (e) {
-        let buttonId = "#" + e.delegateTarget.relationId
-        $(buttonId).removeClass("select");
-        hideButtons(e.delegateTarget, $(e.delegateTarget).parent().next()[0]);
 
-    });
 };
 function reloadByUrl(url) {
     this.document.location.href = url;

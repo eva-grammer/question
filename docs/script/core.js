@@ -104,7 +104,7 @@ function createHtmlContents(contents) {
         article.removeChild(article.children[0]);
 
     }
-
+    createNote();
     contents.forEach((oneContent) => {
         createOneHtmlContent(oneContent, article);
     });
@@ -572,6 +572,7 @@ function loadQuestion() {
             result.questions.forEach((d) => {
                 handlerDialogEnWord(d, "answer");
             });
+             createNote();
             createQuestion(result.questions);
         }
         if (result.contents) {

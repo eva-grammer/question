@@ -23,6 +23,7 @@ li div {
 .select-word span {
     color: red;
     min-width: 10px;
+    border: 1px dashed white;
 }
 
 .error {
@@ -44,11 +45,13 @@ li div {
 .move {
     background: pink;
     cursor: pointer;
-    max-width: 1px;
-    max-height: 1px;
+    
     overflow: hidden;
 } 
-
+.waitmove {
+    border: 1px dashed red !important;
+  
+  }
 .note {
     padding: 25px;
     background: #eee;

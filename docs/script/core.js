@@ -2,7 +2,7 @@ let tempAudio = null;
 let currentPlayAudio = null;
 let errorInfoBox = null;
 let maxAudioNumber = 4;
-let lastElement = null;
+let lastEerrorSourcelement = null;
 let currentPlayNumber = 0;
 let clickAudioUrl =
     "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav";
@@ -311,13 +311,15 @@ function draggableHandle(li_word, words,
         stop: function (event, ui) {
             console.log("stop ", event, ui);
             ui.helper.removeClass("move");
-            ui.helper.html(ui.helper.attr("oldValue"));
+            // ui.helper.html(ui.helper.attr("oldValue"));
             ui.helper.css({ top: 0, left: 0 })
+            ui.helper.parent().children().removeClass("waitmove");
         },
         start: function (event, ui) {
             ui.helper.addClass("move");
             ui.helper.attr("oldValue", ui.helper.html());
-            ui.helper.empty()
+            // ui.helper.empty();
+            ui.helper.parent().children().addClass("waitmove");
             console.log("stop ", event, ui);
         },
 
@@ -327,7 +329,11 @@ function draggableHandle(li_word, words,
             ui.helper.html(ui.helper.attr("oldValue"));
             console.log("drop ", event, ui);
             ui.helper.css({ top: 0, left: 0 })
-            ui.helper.insertBefore(event.target)
+            if (event.target.tagName == "SPAN") {
+                ui.helper.insertBefore(event.target)
+            }
+
+            ui.helper.parent().children().removeClass("waitmove");
             check(words.length, answer, li_Question, li_result, originalWords);
         },
     });
@@ -361,7 +367,7 @@ function playAudion(audio, onError) {
         playPromise.then(_ => {
             audio.canPause = true;
         }).catch(error => {
-            console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + audio.errorSource + audio.tag + "]:");
+            console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + audio.errorSource + audio.tag||"" + "]:");
             if (onerror) {
                 onError();
             }
@@ -572,32 +578,39 @@ function playLinkClick(srcElement) {
 function loadQuestion() {
     createNote();
     let url = this.document.location.href.replace("/#/./", "/question/") + ".json";
-    $.getJSON(url, function (result) {
-        if (result.questions) {
-            result.questions.forEach((d) => {
-                handlerDialogEnWord(d, "answer");
-            });
-            createNote();
-            createQuestion(result.questions);
-        }
-        if (result.contents) {
-            createHtmlContents(result.contents);
-        }
-
-
-        if (result.dialogs) {
-            result.dialogs.forEach((d) => {
-                d.answer.forEach((d) => {
-                    handlerDialogEnWord(d, "en");
-                });
-            });
-            createDialog(result.dialogs);
-        }
-        createNextLink();
-        $(".select-word").delegate("span", "dblclick", function (e) {
-            doubleClickWord(e);
-
+    if (localData) {
+        handleContent(localData)
+    } else {
+        $.getJSON(url, function (result) {
+            handleContent(result);
         });
+    }
+
+}
+function handleContent(result) {
+    if (result.questions) {
+        result.questions.forEach((d) => {
+            handlerDialogEnWord(d, "answer");
+        }); 
+        createQuestion(result.questions);
+    }
+    if (result.contents) {
+        createHtmlContents(result.contents);
+    }
+
+
+    if (result.dialogs) {
+        result.dialogs.forEach((d) => {
+            d.answer.forEach((d) => {
+                handlerDialogEnWord(d, "en");
+            });
+        });
+        createDialog(result.dialogs);
+    }
+    createNextLink();
+    $(".select-word").delegate("span", "dblclick", function (e) {
+        doubleClickWord(e);
+
     });
 }
 window.onload = function () {
@@ -644,7 +657,9 @@ function createNote() {
     article.appendChild(olNote);
 }
 function doubleClickWord(e) {
-
+    if (!e.target?.relationId) {
+        return;
+    }
     let buttonId = "#" + e.target.relationId
     $(buttonId).removeClass("select");
     let parent = $(e.target).parent().parent().next();

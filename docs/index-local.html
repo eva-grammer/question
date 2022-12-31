@@ -17,15 +17,19 @@
     <script src="script/jquery-ui.min.js"></script>
     <style>
       .select-word span {
-        border: 1px solid red;
-        padding: 10px;
+        padding-left: 15px;
+
         display: inline-block;
+      }
+      .waitmove {
+        border: 1px dashed red;
+        padding: 10px;
       }
       .move {
         background: pink;
         cursor: pointer;
-        max-width: 1px;
-        max-height: 1px;
+        /* max-width: 1px;
+        max-height: 1px; */
         overflow: hidden;
       }
 
@@ -34,7 +38,7 @@
         background: #eee;
         border-radius: 5px;
         margin: 15px;
-       
+
         font-weight: bold;
       }
     </style>
@@ -58,12 +62,18 @@
         <li>
           <ul>
             <li>我是一个男孩（boy）。</li>
-            <li>
+            <li class="select-wordli">
               <div class="select-word ui-sortable">
                 <span class="selected-word">I</span
                 ><span class="selected-word">am</span
                 ><span class="selected-word">a</span
                 ><span class="selected-word">boy.</span>
+
+                <span class="selected-word">she</span
+                  ><span class="selected-word">is</span
+                  ><span class="selected-word">a</span
+                  ><span class="selected-word">butiful</span>
+                  <span class="selected-word">girl.</span>
               </div>
             </li>
             <li>
@@ -321,48 +331,115 @@
     </article>
 
     <script>
-      function adddroppable() {
-        $(".select-word span").droppable({
-          drop: function (event, ui) {
-            ui.helper.removeClass("move");
-            ui.helper.html(ui.helper.attr("oldValue"));
-            console.log("drop ", event, ui);
-          },
-        });
-        $(".select-word span").draggable({
-          cursor: "move",
-
-          out: function (event, ui) {
-            console.log("out ", event, ui);
-          },
-          update: function (event, ui) {
-            console.log("update ", event, ui);
-            // check(words.length, answer, li_Question, li_result, originalWords);
-          },
-          stop: function (event, ui) {
-            console.log("stop ", event, ui);
-            ui.helper.removeClass("move");
-            ui.helper.html(ui.helper.attr("oldValue"));
-          },
-          start: function (event, ui) {
-            ui.helper.addClass("move");
-            ui.helper.attr("oldValue", ui.helper.html());
-            ui.helper.empty();
-            console.log("stop ", event, ui);
-          },
-        });
+      function draggableHandle(li_word) {
+        $(".select-word span")
+          .draggable({
+            containment: ".select-wordli",
+            cursor: "move",
+            stop: function (event, ui) {
+              console.log("stop ", event, ui);
+              ui.helper.removeClass("move");
+              //ui.helper.html(ui.helper.attr("oldValue"));
+              ui.helper.css({ top: 0, left: 0 });
+              $(".select-word span").removeClass("waitmove");
+            },
+            start: function (event, ui) {
+              ui.helper.addClass("move");
+              ui.helper.attr("oldValue", ui.helper.html());
+              //  ui.helper.empty();
+              console.log("stop ", event, ui);
+              $(".select-word span").addClass("waitmove");
+            },
+          })
+          .droppable({
+            drop: function (event, ui) {
+              ui.helper.removeClass("move");
+              ui.helper.html(ui.helper.attr("oldValue"));
+              console.log("drop ", event, ui);
+              ui.helper.css({ top: 0, left: 0 });
+              ui.helper.insertBefore(event.target);
+              $(".select-word span").removeClass("waitmove");
+            },
+          });
       }
       $("button").click(function (event) {
         var word = event.target.textContent;
         $($(event.target.parentElement).prev().children(0)).append(
           "<span class='selected-word'>" + word + "</span>"
         );
-        adddroppable();
+        draggableHandle();
       });
 
       $(".select-word").delegate("span", "dblclick", function (e) {
         console.log(e);
       });
+
+      (function ($) {
+        $.support.touch = true; // typeof Touch === 'object';
+
+        if (!$.support.touch) {
+          return;
+        }
+
+        var proto = $.ui.mouse.prototype,
+          _mouseInit = proto._mouseInit;
+
+        $.extend(proto, {
+          _getElementToBind: function () {
+            const el = this.element;
+            return el;
+          },
+
+          _mouseInit: function () {
+            this._getElementToBind().bind(
+              "touchstart." + this.widgetName,
+              $.proxy(this, "_touchStart")
+            );
+            _mouseInit.apply(this, arguments);
+          },
+
+          _touchStart: function (event) {
+            if (event.originalEvent.targetTouches.length != 1) {
+              return false;
+            }
+
+            if (!this._mouseCapture(event, false)) {
+              // protects things like the "handle" option on sortable
+              return true;
+            }
+
+            this.element
+              .bind("touchmove." + this.widgetName, $.proxy(this, "_touchMove"))
+              .bind("touchend." + this.widgetName, $.proxy(this, "_touchEnd"));
+
+            this._modifyEvent(event);
+
+            $(document).trigger($.Event("mouseup")); // reset mouseHandled flag in ui.mouse
+            this._mouseDown(event);
+
+            return false;
+          },
+
+          _touchMove: function (event) {
+            this._modifyEvent(event);
+            this._mouseMove(event);
+          },
+
+          _touchEnd: function (event) {
+            this.element
+              .unbind("touchmove." + this.widgetName)
+              .unbind("touchend." + this.widgetName);
+            this._mouseUp(event);
+          },
+
+          _modifyEvent: function (event) {
+            event.which = 1;
+            var target = event.originalEvent.targetTouches[0];
+            event.pageX = target.clientX;
+            event.pageY = target.clientY;
+          },
+        });
+      })(jQuery);
     </script>
   </body>
 </html>

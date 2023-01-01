@@ -651,8 +651,11 @@ function createPEP(result) {
 
 function createSelectTitleByWord(result, article) {
     //根据单词 选意思
-    let article = document.getElementsByTagName("article")[0];
+    
+    result.words.forEach(word => {
+       
 
+    })
 
 
 
@@ -661,8 +664,7 @@ function createSelectTitleByWord(result, article) {
 
 function createSelectPronuceByWord(result, article) {
     //根据单词 选音标
-    let article = document.getElementsByTagName("article")[0];
-
+    
 
 
 
@@ -670,8 +672,7 @@ function createSelectPronuceByWord(result, article) {
 
 function createWriteWordByTitle(result, article) {
     //根据意思 写单词
-    let article = document.getElementsByTagName("article")[0];
-
+    
 
 
 
@@ -679,8 +680,7 @@ function createWriteWordByTitle(result, article) {
 
 function createSelectWordByAudio(result, article) {
     //根据音频 猜单词 
-    let article = document.getElementsByTagName("article")[0];
-
+    
 
 
     //根据音频 写单词 
@@ -690,8 +690,7 @@ function createSelectWordByAudio(result, article) {
 
 function createWriteWordByAudio(result, article) {
     //根据音频 写单词 
-    let article = document.getElementsByTagName("article")[0];
-
+    
 
 
 

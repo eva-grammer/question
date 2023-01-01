@@ -1,9 +1,11 @@
+
 let tempAudio = null;
 let currentPlayAudio = null;
 let errorInfoBox = null;
 let maxAudioNumber = 4;
 let lastEerrorSourcelement = null;
 let currentPlayNumber = 0;
+let lastElement = null;
 let clickAudioUrl =
     "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav";
 let clickAudio = [];
@@ -428,37 +430,42 @@ function check(
     li_result,
     originalWords
 ) {
-    if (wordLength !== resultElements.childElementCount) {
-        li_result.textContent = "";
-        return;
+    let playWord = answer;
+    let addempty = li_result.isWord !== 1;
+    if (addempty) {
+        playWord = originalWords;
+        if (wordLength !== resultElements.childElementCount) {
+            li_result.textContent = "";
+            return;
+        }
+    } else {
+
+        if (answer.length !== resultElements.childElementCount) {
+            li_result.textContent = "";
+            return;
+        }
     }
+
     let test = undefined;
+
+
     for (let index = 0; index < resultElements.childElementCount; index++) {
         const element = resultElements.children[index];
 
         if (test == undefined) {
             test = element.innerText;
         } else {
-            test += " " + element.innerText;
+            if (addempty) { test += " " + element.innerText; }
+            else {
+                test += element.innerText;
+            }
+
         }
     }
     let isSuccess = test == answer;
     if (isSuccess) {
-        li_result.textContent = "正确";
-        li_result.className = "success";
-        if ($(resultElements).attr("wordNumber") * 1 == wordNumber) {
-            startFire();
-        }
-        playAudion(successAudio);
+        playwordOrSentence(li_result, playWord);
 
-        setTimeout(() => {
-            let href =
-                "https://dict.youdao.com/dictvoice?audio=" +
-                originalWords.join("+") +
-                "&le=eng&le=eng&type=2";
-            stopPlay();
-            playAudionWithUrl(href, false);
-        }, 1000);
     } else {
         li_result.textContent = "错误";
         li_result.className = "error";
@@ -526,9 +533,10 @@ function createNextLink() {
         for (let index = 0; index < total; index++) {
             const element = allLinks[index];
             if (currentUrl == element.href) {
-                index += 1;
-                if (index < total) {
-                    let nextLinkUrl = allLinks[index].href;
+                let nextIndex = index + 1;
+
+                if (nextIndex < total) {
+                    let nextLinkUrl = allLinks[nextIndex].href;
                     let nextLink = document.createElement("a");
                     nextLink.href = nextLinkUrl;
                     nextLink.target = "_self";
@@ -632,31 +640,396 @@ function createPEP(result) {
     let article = document.getElementsByTagName("article")[0];
     //根据单词 选意思
     createSelectTitleByWord(result, article);
-
-
+    //根据译文 选单词
+    createSelectWordByTitle(result, article);
     //根据单词 选音标
-    createSelectPronuceByWord(result, article)
-
-
-    //根据意思 写单词
-    createWriteWordByTitle(result, article)
+    createSelectPronuceByWord(result, article);
+    //根据译文 选音标
+    createSelectPronuceByWordTitle(result, article);
+    //根据译文 写单词
+    createWriteWordByTitle(result, article);
 
     //根据音频 猜单词 
-    createSelectWordByAudio(result, article)
+    createSelectWordByAudio(result, article);
 
     //根据音频 写单词 
-    createWriteWordByAudio(result, article)
+    createWriteWordByAudio(result, article);
+
+}
+function createPronounce(word, yinbiao, typenumber, parentElement, showYinbiao) {
+    if (!yinbiao) return;
+    if (showYinbiao) {
+        let pronunceElement1 = document.createElement("span");
+        pronunceElement1.textContent = (typenumber == 1 ? "(英)" : "(美)") + yinbiao;
+        parentElement.appendChild(pronunceElement1);
+    }
+    let link = document.createElement("a");
+    link.href = `https://dict.youdao.com/dictvoice?audio=${word}\&type=${typenumber}`;
+    link.textContent = "播放";
+
+
+    parentElement.appendChild(link);
+}
+
+let lastrandom = -1;
+function getRndInteger(max, exceptNum) {
+    let result = -1;
+
+    while (result < 0 || exceptNum.indexOf(result) > -1 || result == lastrandom) {
+        result = Math.floor(Math.random() * max);
+    }
+    exceptNum.push(result);
+    lastrandom = result;
+    return result;
+}
+function createChineseOption(resultElment, words, wordindex) {
+    wordNumber++;
+    resultElment.wordNumber = wordNumber;
+    resultElment.isWord = 1;
+    let correctAnswer = words[wordindex].title;
+    let arrayOpts = [{ opt: correctAnswer, isCorrect: true }];
+    let exceptNum = [wordindex];
+    let random = getRndInteger(words.length, exceptNum);
+    arrayOpts.push({ opt: words[random].title, isCorrect: false });
+    random = getRndInteger(words.length, exceptNum);
+
+    arrayOpts.push({ opt: words[random].title, isCorrect: false });
+    random = getRndInteger(words.length, exceptNum);
+    arrayOpts.push({ opt: words[random].title, isCorrect: false });
+
+    arrayOpts.sort(randomSort);
+    let optsWrapDiv = document.createElement("ul");
+
+    let name = guid();
+    arrayOpts.forEach(element => {
+        let li = document.createElement("li");
+        let input = document.createElement("input");
+        input.type = "radio";
+        input.name = name;
+        input.id = guid();
+        let inputlabel = document.createElement("label");
+        inputlabel.for = input.id;
+        let optsArray = splitChines(element.opt);
+        if (optsArray.length == 1) {
+            inputlabel.textContent = element.opt;
+        } else {
+            let hasAdd = false;
+            optsArray.forEach((element) => {
+                if (!element) { return; }
+                if (hasAdd) {
+                    let br = document.createElement("br");
+
+                    inputlabel.appendChild(br);
+                }
+                let o = document.createElement("span");
+                o.textContent = element;
+                hasAdd = true;
+                inputlabel.appendChild(o);
+            });
+        }
+
+        input.result = element.isCorrect ? 1 : 0;
+        li.appendChild(input);
+        li.appendChild(inputlabel);
+        optsWrapDiv.appendChild(li);
+        input.onchange = function (e) {
+            let isSuccess = e.currentTarget.result == 1;
+            if (isSuccess) {
+                playwordOrSentence(resultElment, words[wordindex].word);
+
+
+            } else {
+                resultElment.textContent = "错误";
+                resultElment.className = "error";
+                playAudion(failAudio);
+            }
+        }
+    });
+    return optsWrapDiv;
+}
+
+function playwordOrSentence(resultElment, word) {
+    resultElment.textContent = "正确";
+    resultElment.className = "success";
+    if (resultElment.wordNumber * 1 == wordNumber) {
+        startFire();
+    }
+
+    let playWord = word;
+    if (word.join) {
+        playWord = word.join("+");
+    }
+    playAudion(successAudio);
+    setTimeout(() => {
+        let href =
+            "https://dict.youdao.com/dictvoice?audio=" +
+            playWord +
+            "&le=eng&le=eng&type=2";
+        stopPlay();
+        playAudionWithUrl(href, false);
+    }, 1000);
+}
+function createPronunceOption(resultElment, words, wordindex) {
+    wordNumber++;
+    resultElment.wordNumber = wordNumber;
+
+    let arrayOpts = [{ opt: words[wordindex].eUYinBiao, isCorrect: true }];
+    let exceptNum = [wordindex];
+    let random = getRndInteger(words.length, exceptNum);
+    arrayOpts.push({ opt: words[random].eUYinBiao, isCorrect: false });
+    random = getRndInteger(words.length, exceptNum);
+    arrayOpts.push({ opt: words[random].eUYinBiao, isCorrect: false });
+    random = getRndInteger(words.length, exceptNum);
+    arrayOpts.push({ opt: words[random].eUYinBiao, isCorrect: false });
+
+    arrayOpts.sort(randomSort);
+    let optsWrapDiv = document.createElement("ul");
+
+    let name = guid();
+    arrayOpts.forEach(element => {
+        let li = document.createElement("li");
+        let input = document.createElement("input");
+        input.type = "radio";
+        input.name = name;
+        input.id = guid();
+        let inputlabel = document.createElement("label");
+        inputlabel.for = input.id;
+        inputlabel.textContent = element.opt;
+
+        input.result = element.isCorrect ? 1 : 0;
+        li.appendChild(input);
+        li.appendChild(inputlabel);
+        optsWrapDiv.appendChild(li);
+        input.onchange = function (e) {
+            let isSuccess = e.currentTarget.result == 1;
+            if (isSuccess) {
+
+                playwordOrSentence(resultElment, words[wordindex].word);
+
+            } else {
+                resultElment.textContent = "错误";
+                resultElment.className = "error";
+                playAudion(failAudio);
+            }
+        }
+    });
+    return optsWrapDiv;
+}
+
+function createWordOption(resultElment, words, wordindex) {
+    wordNumber++;
+    resultElment.wordNumber = wordNumber;
+
+    let arrayOpts = [{ opt: words[wordindex].word, isCorrect: true }];
+    let exceptNum = [wordindex];
+    let random = getRndInteger(words.length, exceptNum);
+    arrayOpts.push({ opt: words[random].word, isCorrect: false });
+    random = getRndInteger(words.length, exceptNum);
+    arrayOpts.push({ opt: words[random].word, isCorrect: false });
+    random = getRndInteger(words.length, exceptNum);
+    arrayOpts.push({ opt: words[random].word, isCorrect: false });
+
+    arrayOpts.sort(randomSort);
+    let optsWrapDiv = document.createElement("ul");
+
+    let name = guid();
+    arrayOpts.forEach(element => {
+        let li = document.createElement("li");
+        let input = document.createElement("input");
+        input.type = "radio";
+        input.name = name;
+        input.id = guid();
+        let inputlabel = document.createElement("label");
+        inputlabel.for = input.id;
+        inputlabel.textContent = element.opt;
+
+        input.result = element.isCorrect ? 1 : 0;
+        li.appendChild(input);
+        li.appendChild(inputlabel);
+        optsWrapDiv.appendChild(li);
+        input.onchange = function (e) {
+            let isSuccess = e.currentTarget.result == 1;
+            if (isSuccess) {
+                playwordOrSentence(resultElment, words[wordindex].word);
+
+
+            } else {
+                resultElment.textContent = "错误";
+                resultElment.className = "error";
+                playAudion(failAudio);
+            }
+        }
+    });
+    return optsWrapDiv;
+}
+function createWordLetters(resultElment, word,
+    li_Question,
+    li_result) {
+
+    const allLetter = "abcdefghijklmnopqrstuvwxyz";
+    let selectOpts = [];
+    for (const char of word) {
+        selectOpts.push(char);
+    }
+    for (let index = 0; index < 26; index++) {
+        const char = allLetter[index];
+        if (word.indexOf(char) < 0) {
+            selectOpts.push(char);
+        }
+
+    }
+    selectOpts.sort();
+    createWordButton(
+        selectOpts,
+        word,
+        word, resultElment,
+        li_Question,
+        li_result
+    );
+
+
+
+}
+function createSelectTitleByWord(result, article) {
+    //根据单词 选意思
+    let h3 = document.createElement("h3");
+    h3.textContent = "根据单词 选意思";
+    article.appendChild(h3);
+    let ol = document.createElement("ol");
+    result.words.forEach((wordInfo, index) => {
+
+        let li = document.createElement("li");
+        let wordDiv = document.createElement("div");
+        wordDiv.className = "word-title";
+        let wordElement = document.createElement("strong");
+        wordElement.textContent = wordInfo.word;
+
+        wordDiv.appendChild(wordElement);
+        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, true);
+        createPronounce(wordInfo.word, wordInfo.uSAYinBiao, 2, wordDiv, true);
+
+        let resultElment = document.createElement("div");
+        let optsElement = createChineseOption(resultElment, result.words, index);
+
+        wordDiv.appendChild(optsElement);
+
+        wordDiv.appendChild(resultElment);
+        li.appendChild(wordDiv);
+
+        ol.appendChild(li);
+
+    })
+    article.appendChild(ol);
+
+
+
+}
+function splitChines(title) {
+    return title.split(/\s{4}/);
+}
+function createSelectPronuceByWordTitle(result, article) {
+    //根据译文 选音标
+    let h3 = document.createElement("h3");
+    h3.textContent = "根据译文 选音标";
+    article.appendChild(h3);
+    let ol = document.createElement("ol");
+    result.words.forEach((wordInfo, index) => {
+
+        let li = document.createElement("li");
+        let wordDiv = document.createElement("div");
+        wordDiv.className = "word-title";
+
+        let optsArray = splitChines(wordInfo.title);
+        if (optsArray.length == 1) {
+            wordDiv.textContent = wordInfo.title;
+        } else {
+            let hasAdd = false;
+            optsArray.forEach((element) => {
+                if (!element) { return; }
+                if (hasAdd) {
+                    let br = document.createElement("br");
+
+                    wordDiv.appendChild(br);
+                }
+                let o = document.createElement("span");
+                o.textContent = element;
+                hasAdd = true;
+                wordDiv.appendChild(o);
+            });
+        }
+
+
+
+
+        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, false);
+
+
+        let resultElment = document.createElement("div");
+        let optsElement = createPronunceOption(resultElment, result.words, index);
+
+        wordDiv.appendChild(optsElement);
+
+        wordDiv.appendChild(resultElment);
+        li.appendChild(wordDiv);
+
+        ol.appendChild(li);
+
+    })
+    article.appendChild(ol);
+
+
 
 }
 
-function createSelectTitleByWord(result, article) {
-    //根据单词 选意思
-    
-    result.words.forEach(word => {
-       
+function createSelectWordByTitle(result, article) {
+    //根据译文 选单词
+    let h3 = document.createElement("h3");
+    h3.textContent = "根据译文 选单词";
+    article.appendChild(h3);
+    let ol = document.createElement("ol");
+    result.words.forEach((wordInfo, index) => {
+
+        let li = document.createElement("li");
+        let wordDiv = document.createElement("div");
+        wordDiv.className = "word-title";
+
+        let optsArray = splitChines(wordInfo.title);
+        if (optsArray.length == 1) {
+            wordDiv.textContent = wordInfo.title;
+        } else {
+            let hasAdd = false;
+            optsArray.forEach((element) => {
+                if (!element) { return; }
+                if (hasAdd) {
+                    let br = document.createElement("br");
+
+                    wordDiv.appendChild(br);
+                }
+                let o = document.createElement("span");
+                o.textContent = element;
+                hasAdd = true;
+                wordDiv.appendChild(o);
+            });
+        }
+
+
+
+
+        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, true);
+        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 2, wordDiv, true);
+
+        let resultElment = document.createElement("div");
+        let optsElement = createWordOption(resultElment, result.words, index);
+
+        wordDiv.appendChild(optsElement);
+
+        wordDiv.appendChild(resultElment);
+        li.appendChild(wordDiv);
+
+        ol.appendChild(li);
 
     })
-
+    article.appendChild(ol);
 
 
 
@@ -664,34 +1037,188 @@ function createSelectTitleByWord(result, article) {
 
 function createSelectPronuceByWord(result, article) {
     //根据单词 选音标
-    
+    let h3 = document.createElement("h3");
+    h3.textContent = "根据单词 选音标";
+    article.appendChild(h3);
+    let ol = document.createElement("ol");
+    result.words.forEach((wordInfo, index) => {
+
+        let li = document.createElement("li");
+        let wordDiv = document.createElement("div");
+        wordDiv.className = "word-title";
+        let wordElement = document.createElement("strong");
+        wordElement.textContent = wordInfo.word;
+
+        wordDiv.appendChild(wordElement);
+        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, false);
+
+
+        let resultElment = document.createElement("div");
+        let optsElement = createPronunceOption(resultElment, result.words, index);
+
+        wordDiv.appendChild(optsElement);
+
+        wordDiv.appendChild(resultElment);
+        li.appendChild(wordDiv);
+
+        ol.appendChild(li);
+
+    })
+    article.appendChild(ol);
 
 
 
 }
 
 function createWriteWordByTitle(result, article) {
-    //根据意思 写单词
-    
+    //根据译文 写单词
 
+    let h3 = document.createElement("h3");
+    h3.textContent = "根据译文 写单词";
+    article.appendChild(h3);
+    let ol = document.createElement("ol");
+    result.words.forEach((wordInfo, index) => {
+
+        let li = document.createElement("li");
+        let wordDiv = document.createElement("div");
+        wordDiv.className = "word-title";
+
+        let optsArray = splitChines(wordInfo.title);
+        if (optsArray.length == 1) {
+            wordDiv.textContent = wordInfo.title;
+        } else {
+            let hasAdd = false;
+            optsArray.forEach((element) => {
+                if (!element) { return; }
+                if (hasAdd) {
+                    let br = document.createElement("br");
+
+                    wordDiv.appendChild(br);
+                }
+                let o = document.createElement("span");
+                o.textContent = element;
+                hasAdd = true;
+                wordDiv.appendChild(o);
+            });
+        }
+
+
+
+
+        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, true);
+
+        let ulElment = document.createElement("ul");
+
+
+        let li_Question = document.createElement("li");
+        li_Question.className = "wordresult select-word";
+        let liElment = document.createElement("li");
+        let li_action = document.createElement("li");
+        let li_result = document.createElement("li");
+        li_result.isWord = 1;
+
+        createResetButton(li_action, li_Question, liElment);
+
+
+
+
+        ulElment.appendChild(li_Question);
+        ulElment.appendChild(liElment);
+        ulElment.appendChild(li_action);
+        ulElment.appendChild(li_result);
+        createWordLetters(liElment, wordInfo.word, li_Question, li_result);
+
+
+        wordDiv.appendChild(ulElment);
+        li.appendChild(wordDiv);
+        ol.appendChild(li);
+
+    })
+    article.appendChild(ol);
 
 
 }
 
 function createSelectWordByAudio(result, article) {
     //根据音频 猜单词 
-    
+
+    let h3 = document.createElement("h3");
+    h3.textContent = "根据音频 猜单词";
+    article.appendChild(h3);
+    let ol = document.createElement("ol");
+    result.words.forEach((wordInfo, index) => {
+
+        let li = document.createElement("li");
+        let wordDiv = document.createElement("div");
+        wordDiv.className = "word-title";
+
+        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, true);
+        createPronounce(wordInfo.word, wordInfo.uSAYinBiao, 2, wordDiv, true);
+
+        let resultElment = document.createElement("div");
+        let optsElement = createWordOption(resultElment, result.words, index);
+
+        wordDiv.appendChild(optsElement);
+
+        wordDiv.appendChild(resultElment);
+        li.appendChild(wordDiv);
+
+        ol.appendChild(li);
+
+    })
+    article.appendChild(ol);
 
 
-    //根据音频 写单词 
+
 
 
 }
 
 function createWriteWordByAudio(result, article) {
-    //根据音频 写单词 
-    
+    //根据音频 写单词  
 
+    let h3 = document.createElement("h3");
+    h3.textContent = "根据音频 猜单词";
+    article.appendChild(h3);
+    let ol = document.createElement("ol");
+    result.words.forEach((wordInfo, index) => {
+
+        let li = document.createElement("li");
+        let wordDiv = document.createElement("div");
+        wordDiv.className = "word-title";
+
+        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, true);
+        createPronounce(wordInfo.word, wordInfo.uSAYinBiao, 2, wordDiv, true);
+
+
+        let ulElment = document.createElement("ul");
+
+
+        let li_Question = document.createElement("li");
+        li_Question.className = "wordresult select-word";
+        let liElment = document.createElement("li");
+        let li_action = document.createElement("li");
+        let li_result = document.createElement("li");
+        li_result.isWord = 1;
+
+        createResetButton(li_action, li_Question, liElment);
+
+
+
+
+        ulElment.appendChild(li_Question);
+        ulElment.appendChild(liElment);
+        ulElment.appendChild(li_action);
+        ulElment.appendChild(li_result);
+        createWordLetters(liElment, wordInfo.word, li_Question, li_result);
+
+
+        wordDiv.appendChild(ulElment);
+        li.appendChild(wordDiv);
+        ol.appendChild(li);
+
+    })
+    article.appendChild(ol);
 
 
 

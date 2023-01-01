@@ -60,3 +60,11 @@ li div {
    
     font-weight: bold;
   }
+  .word-title{
+    align-items: center;
+    display: block;
+  }
+  .wordresult span{
+    margin-left: 0;
+    margin-right: 0;
+  }

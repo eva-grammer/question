@@ -1275,6 +1275,9 @@ function doubleClickWord(e) {
     if (!e.target?.relationId) {
         return;
     }
+    if (e.target.tagName!=="SPAN") {
+        return;
+    }
     let buttonId = "#" + e.target.relationId
     $(buttonId).removeClass("select");
     let parent = $(e.target).parent().parent().next();

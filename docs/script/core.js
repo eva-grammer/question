@@ -464,7 +464,7 @@ function check(
     }
     let isSuccess = test == answer;
     if (isSuccess) {
-        playwordOrSentence(li_result, playWord);
+        playwordOrSentence(li_result, playWord, resultElements);
 
     } else {
         li_result.textContent = "错误";
@@ -748,10 +748,14 @@ function createChineseOption(resultElment, words, wordindex) {
     return optsWrapDiv;
 }
 
-function playwordOrSentence(resultElment, word) {
+function playwordOrSentence(resultElment, word, resultElements) {
     resultElment.textContent = "正确";
     resultElment.className = "success";
-    if (resultElment.wordNumber * 1 == wordNumber) {
+    let currentWordNumber = resultElment.wordNumber;
+    if (currentWordNumber == undefined) {
+        currentWordNumber = $(resultElements).attr("wordNumber");
+    }
+    if (currentWordNumber * 1 == wordNumber) {
         startFire();
     }
 

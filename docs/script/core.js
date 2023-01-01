@@ -367,7 +367,7 @@ function playAudion(audio, onError) {
         playPromise.then(_ => {
             audio.canPause = true;
         }).catch(error => {
-            console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + audio.errorSource + audio.tag||"" + "]:");
+            console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + audio.errorSource + audio.tag || "" + "]:");
             if (onerror) {
                 onError();
             }
@@ -578,12 +578,12 @@ function playLinkClick(srcElement) {
 function loadQuestion() {
     createNote();
     let url = this.document.location.href.replace("/#/./", "/question/") + ".json";
-    if (localData) {
-        handleContent(localData)
-    } else {
+    if (!localData) {
         $.getJSON(url, function (result) {
             handleContent(result);
         });
+    } else {
+        handleContent(localData)
     }
 
 }
@@ -591,13 +591,28 @@ function handleContent(result) {
     if (result.questions) {
         result.questions.forEach((d) => {
             handlerDialogEnWord(d, "answer");
-        }); 
+        });
         createQuestion(result.questions);
     }
     if (result.contents) {
         createHtmlContents(result.contents);
     }
+    if (result.words) {
+        createPEP(result);
 
+
+        if (result.parseShort) {
+            let h2 = document.createElement("H2");
+            h2.textContent = "常用表达式";
+            let article = document.getElementsByTagName("article")[0];
+
+            article.appendChild(h2);
+            result.parseShort.forEach((d) => {
+                handlerDialogEnWord(d, "answer");
+            });
+            createQuestion(result.parseShort);
+        }
+    }
 
     if (result.dialogs) {
         result.dialogs.forEach((d) => {
@@ -612,6 +627,76 @@ function handleContent(result) {
         doubleClickWord(e);
 
     });
+}
+function createPEP(result) {
+    let article = document.getElementsByTagName("article")[0];
+    //根据单词 选意思
+    createSelectTitleByWord(result, article);
+
+
+    //根据单词 选音标
+    createSelectPronuceByWord(result, article)
+
+
+    //根据意思 写单词
+    createWriteWordByTitle(result, article)
+
+    //根据音频 猜单词 
+    createSelectWordByAudio(result, article)
+
+    //根据音频 写单词 
+    createWriteWordByAudio(result, article)
+
+}
+
+function createSelectTitleByWord(result, article) {
+    //根据单词 选意思
+    let article = document.getElementsByTagName("article")[0];
+
+
+
+
+
+}
+
+function createSelectPronuceByWord(result, article) {
+    //根据单词 选音标
+    let article = document.getElementsByTagName("article")[0];
+
+
+
+
+}
+
+function createWriteWordByTitle(result, article) {
+    //根据意思 写单词
+    let article = document.getElementsByTagName("article")[0];
+
+
+
+
+}
+
+function createSelectWordByAudio(result, article) {
+    //根据音频 猜单词 
+    let article = document.getElementsByTagName("article")[0];
+
+
+
+    //根据音频 写单词 
+
+
+}
+
+function createWriteWordByAudio(result, article) {
+    //根据音频 写单词 
+    let article = document.getElementsByTagName("article")[0];
+
+
+
+
+
+
 }
 window.onload = function () {
     document.addEventListener("touchstart", function (event) {

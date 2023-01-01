@@ -578,12 +578,12 @@ function playLinkClick(srcElement) {
 function loadQuestion() {
     createNote();
     let url = this.document.location.href.replace("/#/./", "/question/") + ".json";
-    if (!localData) {
+    if (!window.localData) {
         $.getJSON(url, function (result) {
             handleContent(result);
         });
     } else {
-        handleContent(localData)
+        handleContent(window.localData)
     }
 
 }

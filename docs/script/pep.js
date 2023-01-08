@@ -169,8 +169,10 @@ function createTest(title, getTestTitle, testArray, attrName) {
         let li = document.createElement("li");
         li.className = "one-test oneWord";
         let oneTest = createOneTest(getTestTitle, testArray, index, attrName);
-        li.appendChild(oneTest);
-        ol.appendChild(li);
+        if (oneTest) {
+            li.appendChild(oneTest);
+            ol.appendChild(li);
+        }
 
     })
     article.appendChild(ol);
@@ -191,6 +193,7 @@ function createOneTest(getTestTitle, options, correctIndex, attrName) {
 
 
     let parentElement = createRadioOptions(options, correctAnswer, correctIndex, attrName);
+    if (!parentElement) return;
     let li_Result = document.createElement("li");
     li_Result.className = "my-result";
 
@@ -204,15 +207,13 @@ function createRadioOptions(words, correctAnswerItem, wordindex, attrName) {
 
 
     let correctAnswer = correctAnswerItem[attrName];
+    if (!correctAnswer) return;
     let arrayOpts = [{ opt: correctAnswer, isCorrect: true, playword: words[wordindex].word, }];
     let exceptNum = [wordindex];
-    let random = getRndInteger(words.length, exceptNum);
-    arrayOpts.push({ opt: words[random][attrName], isCorrect: false });
-    random = getRndInteger(words.length, exceptNum);
 
-    arrayOpts.push({ opt: words[random][attrName], isCorrect: false });
-    random = getRndInteger(words.length, exceptNum);
-    arrayOpts.push({ opt: words[random][attrName], isCorrect: false });
+    arrayOpts.push(createOneRadioOption(words, attrName, exceptNum, false));
+    arrayOpts.push(createOneRadioOption(words, attrName, exceptNum, false));
+    arrayOpts.push(createOneRadioOption(words, attrName, exceptNum, false));
 
     arrayOpts.sort(randomSort);
 
@@ -259,4 +260,14 @@ function createRadioOptions(words, correctAnswerItem, wordindex, attrName) {
         optsWrapDiv.appendChild(li);
     });
     return optsWrapDiv;
+}
+
+function createOneRadioOption(words, attrName, exceptNum, isCorrect) {
+
+    let random = getRndInteger(words.length, exceptNum);
+    let val = words[random][attrName];
+    if (!val) {
+        createOneRadioOption(words, attrName, exceptNum, isCorrect);
+    }
+    return { opt: val, isCorrect: isCorrect };
 }

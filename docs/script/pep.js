@@ -267,7 +267,7 @@ function createOneRadioOption(words, attrName, exceptNum, isCorrect) {
     let random = getRndInteger(words.length, exceptNum);
     let val = words[random][attrName];
     if (!val) {
-        createOneRadioOption(words, attrName, exceptNum, isCorrect);
+        return  createOneRadioOption(words, attrName, exceptNum, isCorrect);
     }
     return { opt: val, isCorrect: isCorrect };
 }

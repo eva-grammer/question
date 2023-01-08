@@ -71,12 +71,13 @@ function createOneQuestion(parent, question, isOneWord) {
     if (isOneWord === true) {
         li_result.className = "my-result oneword";
     }
-    addTotalTestNumber(li_Result);
+   
     ul.appendChild(li_title);
     ul.appendChild(li_QuestionParent);
     ul.appendChild(li_words);
     ul.appendChild(li_action);
     ul.appendChild(li_result);
+    addTotalTestNumber(li_Result);
     if (question.describe) {
         let li_describe = document.createElement("li");
         li_describe.textContent = question.describe;

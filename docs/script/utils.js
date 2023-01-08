@@ -2,9 +2,9 @@
 
 let errorInfoBox = null;
 let totalTestNumber = 0;
-function addTotalTestNumber($element) {
+function addTotalTestNumber(element) {
     totalTestNumber++;
-    $element.attr("wordNumber", totalTestNumber);
+    $(element).attr("wordNumber", totalTestNumber);
 }
 function randomSort(a, b) {
     return Math.random() > 0.5 ? -1 : 1;

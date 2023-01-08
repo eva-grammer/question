@@ -190,10 +190,11 @@ function createOneTest(getTestTitle, options, correctIndex, attrName) {
     let parentElement = createRadioOptions(options, correctAnswer, correctIndex, attrName);
     let li_Result = document.createElement("li");
     li_Result.className = "my-result";
-    addTotalTestNumber(li_Result);
+  
     ul.appendChild(li_title);
     ul.appendChild(parentElement);
     ul.appendChild(li_Result);
+    addTotalTestNumber(li_Result);
     return ul;
 }
 function createRadioOptions(words, correctAnswerItem, wordindex, attrName) {

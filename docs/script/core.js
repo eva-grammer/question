@@ -68,7 +68,10 @@ function createOneQuestion(parent, question, isOneWord) {
 
     let li_result = document.createElement("li");
     li_result.className = "my-result";
-
+    if (isOneWord === true) {
+        li_result.className = "my-result oneword";
+    }
+    addTotalTestNumber(li_Result);
     ul.appendChild(li_title);
     ul.appendChild(li_QuestionParent);
     ul.appendChild(li_words);

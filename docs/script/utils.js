@@ -1,6 +1,11 @@
 
 
 let errorInfoBox = null;
+let totalTestNumber = 0;
+function addTotalTestNumber($element) {
+    totalTestNumber++;
+    $element.attr("wordNumber", totalTestNumber);
+}
 function randomSort(a, b) {
     return Math.random() > 0.5 ? -1 : 1;
 }
@@ -213,10 +218,14 @@ function handleAnswerResult(isCorrect, resultElement, palayWordOnSuccess) {
         playSuccessAudio();
 
         if (palayWordOnSuccess) {
-            playSentence(palayWordOnSuccess, 500);
+            let playWord = palayWordOnSuccess;
+            if (resultElement.hasClass("oneword")) {
+                playWord = palayWordOnSuccess.join("");
+            }
+            playSentence(playWord, 500);
         }
-        let $oneTest = resultElement.closest(".one-test");
-        if ($oneTest.next(".one-test").length == 0) {
+        let wordNumber = resultElement.attr("wordNumber") * 1;
+        if (wordNumber == totalTestNumber) {
             startFire();
         }
     } else {

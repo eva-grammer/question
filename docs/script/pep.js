@@ -164,7 +164,7 @@ function createTest(title, getTestTitle, testArray, attrName) {
     testArray.forEach((wordInfo, index) => {
 
         let li = document.createElement("li");
-        li.className = "one-test";
+        li.className = "one-test oneWord";
         let oneTest = createOneTest(getTestTitle, testArray, index, attrName);
         li.appendChild(oneTest);
         ol.appendChild(li);
@@ -190,6 +190,7 @@ function createOneTest(getTestTitle, options, correctIndex, attrName) {
     let parentElement = createRadioOptions(options, correctAnswer, correctIndex, attrName);
     let li_Result = document.createElement("li");
     li_Result.className = "my-result";
+    addTotalTestNumber(li_Result);
     ul.appendChild(li_title);
     ul.appendChild(parentElement);
     ul.appendChild(li_Result);

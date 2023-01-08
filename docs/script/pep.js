@@ -71,6 +71,7 @@ function createWriteWordByTitle(result) {
         questions.push({ title: createTitleByYiWen(oneWord), answer: oneWord.word.split('').join(' ') });
 
     });
+    questions.sort(randomSort);
     createQuestion(questions, true, true);
 
 
@@ -98,6 +99,7 @@ function createWriteWordByAudio(result) {
         questions.push({ title: createTitleByAudio(oneWord), answer: oneWord.word.split('').join(' ') });
 
     });
+    questions.sort(randomSort);
     createQuestion(questions, true, true);
 
 }
@@ -161,6 +163,7 @@ function createTest(title, getTestTitle, testArray, attrName) {
 
     createTitle(title);
     let ol = document.createElement("ol");
+    testArray.sort(randomSort);
     testArray.forEach((wordInfo, index) => {
 
         let li = document.createElement("li");
@@ -190,7 +193,7 @@ function createOneTest(getTestTitle, options, correctIndex, attrName) {
     let parentElement = createRadioOptions(options, correctAnswer, correctIndex, attrName);
     let li_Result = document.createElement("li");
     li_Result.className = "my-result";
-  
+
     ul.appendChild(li_title);
     ul.appendChild(parentElement);
     ul.appendChild(li_Result);

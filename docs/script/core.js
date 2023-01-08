@@ -77,7 +77,7 @@ function createOneQuestion(parent, question, isOneWord) {
     ul.appendChild(li_words);
     ul.appendChild(li_action);
     ul.appendChild(li_result);
-    addTotalTestNumber(li_Result);
+    addTotalTestNumber(li_result);
     if (question.describe) {
         let li_describe = document.createElement("li");
         li_describe.textContent = question.describe;

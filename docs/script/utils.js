@@ -79,7 +79,7 @@ function createNextLink() {
                     nextLink.target = "_self";
                     nextLink.textContent = "下一节";
                     article.appendChild(nextLink);
-                   
+
                     return;
                 }
 
@@ -201,17 +201,17 @@ function createResetButton(parentElement) {
 }
 
 
-function createH4Title(title) { 
+function createH4Title(title) {
     createTitle(title, 4);
 }
 
-function handleAnswerResult(isCorrect,resultElement,palayWordOnSuccess){
-    if (isCorrect === "true") {
+function handleAnswerResult(isCorrect, resultElement, palayWordOnSuccess) {
+    if (isCorrect) {
         resultElement.text("恭喜，回答正确！");
         resultElement.removeClass("error");
         resultElement.addClass("success");
         playSuccessAudio();
-        
+
         if (palayWordOnSuccess) {
             playSentence(palayWordOnSuccess, 500);
         }
@@ -227,7 +227,7 @@ function handleAnswerResult(isCorrect,resultElement,palayWordOnSuccess){
         playFailAudio();
     }
 }
-function createTitle(title, hTitleNumber=3) {
+function createTitle(title, hTitleNumber = 3) {
     let h = document.createElement("h" + hTitleNumber);
     h.innerText = title;
     article.appendChild(h);

@@ -2,6 +2,7 @@
 let tempAudio = null;
 let currentPlayAudio = null;
 let maxAudioNumber = 14;
+let MaxTryPlayCount = 10;
 let lastElement = null;
 let clickAudio = [];
 let clickAudioIndex = -1;
@@ -14,7 +15,9 @@ function createAudio(url, source) {
     temp.errorCount = 0;
     temp.tag = "";
     temp.canPause = false;
-    let logInfo = temp.errorSource + temp.tag
+    let logInfo = temp.errorSource + temp.tag;
+    temp.canPlayThisAudio = false;
+    temp.tryPlayCount = 0;
     temp.onabort = function (e) {
 
         console.log("onabort play:" + logInfo);
@@ -55,8 +58,13 @@ function playAudion(audio) {
     let logInfo = audio.errorSource + audio.tag
     if (!audio.canPlayThisAudio) {
         console.log("start play,but can't be play ,wait a moment:" + logInfo);
-        setTimeout(0, 500);
-        playAudion(audio);
+        audio.tryPlayCount += 1;
+        if (audio.tryPlayCount > MaxTryPlayCount) {
+            console.log("放弃 try :" + MaxTryPlayCount);
+            return;
+        }
+        setTimeout(() => playAudion(audio), 500);
+        ;
         return;
     }
     if (audio.duration) {

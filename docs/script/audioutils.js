@@ -15,7 +15,8 @@ function createAudio(url, source) {
     temp.canPause = false;
     temp.onabort = function (e) {
         console.error(e)
-        console.error("来自播放音频onabort第" + (temp.errorCount ? temp.errorCount : 0) + "次错误[" + temp.errorSource + (temp.tag || "") + "]:");
+        let source=temp.errorSource .replace("https://dict.youdao.com/dictvoice?audio=","").replace("&le=eng&le=eng&type=","");
+        console.error("来自播放音频onabort第" + (temp.errorCount ? temp.errorCount : 0) + "次错误[" + source + (temp.tag || "") + "]:");
 
         temp = reCreateAudio(temp);
 

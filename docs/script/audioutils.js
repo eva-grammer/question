@@ -18,18 +18,8 @@ function createAudio(url, source) {
     let logInfo = temp.errorSource + temp.tag;
     temp.canPlayThisAudio = false;
     temp.tryPlayCount = 0;
-    temp.onabort = function (e) {
-
-        console.log("onabort play:" + logInfo);
-        console.error(e)
-        let source = temp.errorSource
-        console.error("来自播放音频onabort第" + (temp.errorCount ? temp.errorCount : 0) + "次错误[" + source + (temp.tag || "") + "]:");
-
-        temp = reCreateAudio(temp);
-
-    };
     temp.onloadedmetadata = function () {
-       // console.log("audio loadedmetadata:" + logInfo);
+        // console.log("audio loadedmetadata:" + logInfo);
         temp.canPlayThisAudio = true;
     }
     return temp;
@@ -43,23 +33,25 @@ for (let index = 0; index < maxAudioNumber; index++) {
 let successAudio = createAudio(
     "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav", "成功声效"
 );
-function reCreateAudio(audio) {
-    let newAudio = createAudio(audio.src, audio.errorSource);
-    newAudio.errorCount = audio.errorCount;
-    newAudio.tag = "-异常重建";
-    return newAudio;
-}
+
 let failAudio = createAudio(
     "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav", "错误声效"
 );
 
 
 function playAudion(audio) {
+
+    if (audio.canPause) {
+        audio.canPlayThisAudio = false;
+        audio.canPause = false;
+        audio.load();
+    }
+
     let logInfo = audio.errorSource + audio.tag
     if (!audio.canPlayThisAudio) {
         audio.tryPlayCount += 1;
         //console.log("["+audio.tryPlayCount+"]start play,but can't be play ,wait a moment:" + logInfo);
-       
+
         if (audio.tryPlayCount > MaxTryPlayCount) {
             console.log("放弃 try :" + MaxTryPlayCount);
             return;
@@ -68,7 +60,7 @@ function playAudion(audio) {
         ;
         return;
     }
-    console.log("start play audio.duration:" + audio.duration+audio.canPause);
+    console.log("start play audio.duration:" + audio.duration + audio.canPause);
     if (audio.duration) {
         if (audio.canPause) {
             audio.pause();
@@ -83,9 +75,11 @@ function playAudion(audio) {
     audio.canPause = false;
 
     let playPromise = audio.play();
+    audio.tryPlayCount=0;
     if (playPromise !== undefined) {
         playPromise.then(_ => {
             audio.canPause = true;
+           
             console.log("start play succecee:" + logInfo);
         }).catch(error => {
             console.log("start play error:" + logInfo);
@@ -95,8 +89,7 @@ function playAudion(audio) {
             stopPlay();
 
         });
-    }else
-    {
+    } else {
         console.log("start play playPromise may be undefined: " + playPromise);
 
     }

@@ -1,7 +1,7 @@
 
 let tempAudio = null;
 let currentPlayAudio = null;
-let maxAudioNumber = 4;
+let maxAudioNumber = 14;
 let lastElement = null;
 let clickAudio = [];
 let clickAudioIndex = -1;

@@ -14,6 +14,8 @@ function createAudio(url, source) {
     temp.tag = "";
     temp.canPause = false;
     temp.onabort = function (e) {
+        let logInfo= audio.errorSource+audio.tag 
+        console.log("onabort play:"+logInfo);
         console.error(e)
         let source=temp.errorSource .replace("https://dict.youdao.com/dictvoice?audio=","").replace("&le=eng&le=eng&type=","");
         console.error("来自播放音频onabort第" + (temp.errorCount ? temp.errorCount : 0) + "次错误[" + source + (temp.tag || "") + "]:");
@@ -47,14 +49,19 @@ function playAudion(audio) {
     if (audio.duration) {
         audio.currentTime = 0;
     }
+    let logInfo= audio.errorSource+audio.tag 
+    console.log("start play:"+logInfo);
     audio.canPause = false;
     let playPromise = audio.play();
     if (playPromise !== undefined) {
         playPromise.then(_ => {
             audio.canPause = true;
+            console.log("start play succecee:"+logInfo);
         }).catch(error => {
+            console.log("start play error:"+logInfo);
             console.error(error)
-            console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + audio.errorSource + (audio.tag || "") + "]:");
+            let source=temp.errorSource .replace("https://dict.youdao.com/dictvoice?audio=","").replace("&le=eng&le=eng&type=","");
+            console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + source+ (audio.tag || "") + "]:");
             stopPlay();
 
         });
@@ -62,11 +69,12 @@ function playAudion(audio) {
 }
 
 function playAudionWithUrl(url, loop) {
-    currentPlayAudio = createAudio(url, "播放音频：" + url);
-    currentPlayAudio.loop = loop;
     if (!loop) {
         stopPlay();
     }
+    currentPlayAudio = createAudio(url, "播放音频：" + url);
+    currentPlayAudio.loop = loop;
+   
     playAudion(currentPlayAudio);
 }
 

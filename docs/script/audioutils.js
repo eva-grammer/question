@@ -14,10 +14,10 @@ function createAudio(url, source) {
     temp.tag = "";
     temp.canPause = false;
     temp.onabort = function (e) {
-        let logInfo= audio.errorSource+audio.tag 
-        console.log("onabort play:"+logInfo);
+        let logInfo = audio.errorSource + audio.tag
+        console.log("onabort play:" + logInfo);
         console.error(e)
-        let source=temp.errorSource .replace("https://dict.youdao.com/dictvoice?audio=","").replace("&le=eng&le=eng&type=","");
+        let source = temp.errorSource.replace("https://dict.youdao.com/dictvoice?audio=", "").replace("&le=eng&le=eng&type=", "");
         console.error("来自播放音频onabort第" + (temp.errorCount ? temp.errorCount : 0) + "次错误[" + source + (temp.tag || "") + "]:");
 
         temp = reCreateAudio(temp);
@@ -47,21 +47,24 @@ let failAudio = createAudio(
 
 function playAudion(audio) {
     if (audio.duration) {
+        if (audio.canPause) {
+            audio.pause();
+        }
         audio.currentTime = 0;
     }
-    let logInfo= audio.errorSource+audio.tag 
-    console.log("start play:"+logInfo);
+    let logInfo = audio.errorSource + audio.tag
+    console.log("start play:" + logInfo);
     audio.canPause = false;
     let playPromise = audio.play();
     if (playPromise !== undefined) {
         playPromise.then(_ => {
             audio.canPause = true;
-            console.log("start play succecee:"+logInfo);
+            console.log("start play succecee:" + logInfo);
         }).catch(error => {
-            console.log("start play error:"+logInfo);
+            console.log("start play error:" + logInfo);
             console.error(error)
-            let source=temp.errorSource .replace("https://dict.youdao.com/dictvoice?audio=","").replace("&le=eng&le=eng&type=","");
-            console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + source+ (audio.tag || "") + "]:");
+            let source = temp.errorSource.replace("https://dict.youdao.com/dictvoice?audio=", "").replace("&le=eng&le=eng&type=", "");
+            console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + source + (audio.tag || "") + "]:");
             stopPlay();
 
         });
@@ -74,7 +77,7 @@ function playAudionWithUrl(url, loop) {
     }
     currentPlayAudio = createAudio(url, "播放音频：" + url);
     currentPlayAudio.loop = loop;
-   
+
     playAudion(currentPlayAudio);
 }
 

@@ -14,8 +14,9 @@ function createAudio(url, source) {
     temp.errorCount = 0;
     temp.tag = "";
     temp.canPause = false;
+    let logInfo = audio.errorSource + audio.tag
     temp.onabort = function (e) {
-        let logInfo = audio.errorSource + audio.tag
+        
         console.log("onabort play:" + logInfo);
         console.error(e)
         let source = temp.errorSource.replace("https://dict.youdao.com/dictvoice?audio=", "").replace("&le=eng&le=eng&type=", "");
@@ -25,6 +26,7 @@ function createAudio(url, source) {
 
     };
     temp.loadedmetadata = function () {
+        console.log("audio loadedmetadata:" + logInfo);
         temp.canPlayThisAudio = true;
     }
     return temp;

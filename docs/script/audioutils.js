@@ -9,6 +9,7 @@ let clickAudioUrl =
     "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav";
 function createAudio(url, source) {
     let temp = new Audio(url);
+    temp.preload = "auto";
     temp.errorSource = source;
     temp.errorCount = 0;
     temp.tag = "";
@@ -23,6 +24,9 @@ function createAudio(url, source) {
         temp = reCreateAudio(temp);
 
     };
+    temp.loadedmetadata = function () {
+        temp.canPlayThisAudio = true;
+    }
     return temp;
 }
 for (let index = 0; index < maxAudioNumber; index++) {
@@ -46,22 +50,33 @@ let failAudio = createAudio(
 
 
 function playAudion(audio) {
+    let logInfo = audio.errorSource + audio.tag
+    if (!audio.canPlayThisAudio) {
+        console.log("start play,but can't be play ,wait a moment:" + logInfo);
+        setTimeout(0, 500);
+        playAudion(audio);
+        return;
+    }
     if (audio.duration) {
         if (audio.canPause) {
             audio.pause();
         }
         audio.currentTime = 0;
     }
-    let logInfo = audio.errorSource + audio.tag
+
     console.log("start play:" + logInfo);
+
+
+
     audio.canPause = false;
+
     let playPromise = audio.play();
     if (playPromise !== undefined) {
         playPromise.then(_ => {
             audio.canPause = true;
             console.log("start play succecee:" + logInfo);
         }).catch(error => {
-           console.log("start play error:" + logInfo);
+            console.log("start play error:" + logInfo);
             console.error(error)
             let source = temp.errorSource.replace("https://dict.youdao.com/dictvoice?audio=", "").replace("&le=eng&le=eng&type=", "");
             console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + source + (audio.tag || "") + "]:");

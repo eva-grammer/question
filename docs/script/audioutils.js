@@ -29,7 +29,7 @@ function createAudio(url, source) {
 
     };
     temp.onloadedmetadata = function () {
-        console.log("audio loadedmetadata:" + logInfo);
+       // console.log("audio loadedmetadata:" + logInfo);
         temp.canPlayThisAudio = true;
     }
     return temp;
@@ -58,7 +58,7 @@ function playAudion(audio) {
     let logInfo = audio.errorSource + audio.tag
     if (!audio.canPlayThisAudio) {
         audio.tryPlayCount += 1;
-        console.log("["+audio.tryPlayCount+"]start play,but can't be play ,wait a moment:" + logInfo);
+        //console.log("["+audio.tryPlayCount+"]start play,but can't be play ,wait a moment:" + logInfo);
        
         if (audio.tryPlayCount > MaxTryPlayCount) {
             console.log("放弃 try :" + MaxTryPlayCount);
@@ -68,6 +68,7 @@ function playAudion(audio) {
         ;
         return;
     }
+    console.log("start play audio.duration:" + audio.duration+audio.canPause);
     if (audio.duration) {
         if (audio.canPause) {
             audio.pause();
@@ -94,6 +95,10 @@ function playAudion(audio) {
             stopPlay();
 
         });
+    }else
+    {
+        console.log("start play playPromise may be undefined: " + playPromise);
+
     }
 }
 

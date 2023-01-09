@@ -57,8 +57,9 @@ let failAudio = createAudio(
 function playAudion(audio) {
     let logInfo = audio.errorSource + audio.tag
     if (!audio.canPlayThisAudio) {
-        console.log("start play,but can't be play ,wait a moment:" + logInfo);
         audio.tryPlayCount += 1;
+        console.log("["+audio.tryPlayCount+"]start play,but can't be play ,wait a moment:" + logInfo);
+       
         if (audio.tryPlayCount > MaxTryPlayCount) {
             console.log("放弃 try :" + MaxTryPlayCount);
             return;

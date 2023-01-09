@@ -11,7 +11,7 @@ let clickAudioUrl =
 function createAudio(url, source) {
     let temp = new Audio(url);
     temp.preload = "auto";
-    temp.errorSource = source;
+    temp.errorSource = source.replace("https://dict.youdao.com/dictvoice?audio=", "").replace("&le=eng&le=eng&type=2", "").replace("&le=eng&le=eng&type=1", "");
     temp.errorCount = 0;
     temp.tag = "";
     temp.canPause = false;
@@ -22,7 +22,7 @@ function createAudio(url, source) {
 
         console.log("onabort play:" + logInfo);
         console.error(e)
-        let source = temp.errorSource.replace("https://dict.youdao.com/dictvoice?audio=", "").replace("&le=eng&le=eng&type=", "");
+        let source = temp.errorSource
         console.error("来自播放音频onabort第" + (temp.errorCount ? temp.errorCount : 0) + "次错误[" + source + (temp.tag || "") + "]:");
 
         temp = reCreateAudio(temp);
@@ -89,7 +89,7 @@ function playAudion(audio) {
         }).catch(error => {
             console.log("start play error:" + logInfo);
             console.error(error)
-            let source = temp.errorSource.replace("https://dict.youdao.com/dictvoice?audio=", "").replace("&le=eng&le=eng&type=", "");
+            let source = temp.errorSource;
             console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + source + (audio.tag || "") + "]:");
             stopPlay();
 

@@ -15,6 +15,7 @@ function createAudio(url, source) {
     temp.errorCount = 0;
     temp.tag = "";
     temp.canPause = false;
+
     let logInfo = temp.errorSource + temp.tag;
     temp.canPlayThisAudio = false;
     temp.tryPlayCount = 0;
@@ -22,6 +23,8 @@ function createAudio(url, source) {
         // console.log("audio loadedmetadata:" + logInfo);
         temp.canPlayThisAudio = true;
     }
+    temp.load();
+    temp.isLoad = true;
     return temp;
 }
 for (let index = 0; index < maxAudioNumber; index++) {
@@ -41,10 +44,11 @@ let failAudio = createAudio(
 
 function playAudion(audio) {
 
-    if (audio.canPause) {
+    if (!audio.isLoad) {
         audio.canPlayThisAudio = false;
         audio.canPause = false;
         audio.load();
+        audio.isLoad = true;
     }
 
     let logInfo = audio.errorSource + audio.tag
@@ -73,13 +77,13 @@ function playAudion(audio) {
 
 
     audio.canPause = false;
-
-    let playPromise = audio.play();
-    audio.tryPlayCount=0;
+    audio.isLoad = false;
+    let playPromise = audio.play(); 
+    audio.tryPlayCount = 0;
     if (playPromise !== undefined) {
         playPromise.then(_ => {
             audio.canPause = true;
-           
+
             console.log("start play succecee:" + logInfo);
         }).catch(error => {
             console.log("start play error:" + logInfo);

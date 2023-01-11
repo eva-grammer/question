@@ -28,10 +28,12 @@ function handleContent(result) {
     registerResetButtonEvent();
     registerPlayLinkClick();
     registerRadioEvent();
-    createNextLink();
-    createRelationBookLink()
-    createErrorInfoBox();
-    registerSelectedWordDbClick();
+    createNextLink(()=>{
+        createRelationBookLink()
+        createErrorInfoBox();
+        registerSelectedWordDbClick();
+    });
+  
 }
 
 

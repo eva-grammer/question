@@ -18,7 +18,7 @@ function removeEmpty(array) {
     });
     return newArray;
 }
-console.error = console.log =console.info=function (error) {
+console.error = console.log = console.info = function (error) {
     if (errorInfoBox) {
         errorInfoBox.value += error + "\r\n";
     }
@@ -63,9 +63,12 @@ function handlerSentence(d) {
 
 }
 
-function createNextLink() {
+function createNextLink(callback) {
     let nav = document.getElementsByClassName("sidebar-nav")[0];
-    if (!nav) return;
+    if (!nav) {
+        callback();
+        return;
+    }
     let allLinks = nav.getElementsByTagName("a");
     if (allLinks.length == 0) {
         setTimeout(v => createNextLink(), 500);
@@ -84,7 +87,7 @@ function createNextLink() {
                     nextLink.target = "_self";
                     nextLink.textContent = "下一节";
                     article.appendChild(nextLink);
-
+                    callback();
                     return;
                 }
 
@@ -160,18 +163,23 @@ function createNote() {
     article.appendChild(olNote);
 }
 function doubleClickWord(e) {
-    if (!e.target?.relationId) {
+
+    let $word = $(e.target);
+    let relationId = $word.attr("relationid");
+    if (!relationId) {
         return;
     }
+
     if (e.target.tagName !== "SPAN") {
         return;
     }
-    let buttonId = "#" + e.target.relationId
-    $(buttonId).removeClass("select");
-    let parent = $(e.target).parent().parent().next();
-    let parentQuestion = $(e.target).parent()[0];
-    $(e.target).remove();
-    hideButtons(parentQuestion, parent[0]);
+    let buttonId = "#" + relationId;
+    let $button = $(buttonId);
+    $button.removeClass("select");
+    let parentButton = $button.parent();
+    let parentQuestion =$word.parent();
+    $word.remove();
+    hideButtons(parentQuestion, parentButton);
 
 }
 

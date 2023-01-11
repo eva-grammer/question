@@ -23,7 +23,6 @@ function createAudio(url, source) {
         // console.log("audio loadedmetadata:" + logInfo);
         temp.canPlayThisAudio = true;
     }
-    temp.load();
     temp.isLoad = true;
     return temp;
 }

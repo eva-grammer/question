@@ -57,14 +57,14 @@ function playAudion(audio) {
         //console.log("["+audio.tryPlayCount+"]start play,but can't be play ,wait a moment:" + logInfo);
 
         if (audio.tryPlayCount > MaxTryPlayCount) {
-            console.log("放弃 try :" + MaxTryPlayCount);
+           console.log("放弃 try :" + MaxTryPlayCount);
             return;
         }
         setTimeout(() => playAudion(audio), 500);
         ;
         return;
     }
-    console.log("start play audio.duration:" + audio.duration + audio.canPause);
+   //  console.log("start play audio.duration:" + audio.duration + audio.canPause);
     if (audio.duration) {
         if (audio.canPause) {
             audio.pause();
@@ -72,7 +72,7 @@ function playAudion(audio) {
         audio.currentTime = 0;
     }
 
-    console.log("start play:" + logInfo);
+    // console.log("start play:" + logInfo);
 
 
 
@@ -84,7 +84,7 @@ function playAudion(audio) {
         playPromise.then(_ => {
             audio.canPause = true;
 
-            console.log("start play succecee:" + logInfo);
+           //  console.log("start play succecee:" + logInfo);
         }).catch(error => {
             console.log("start play error:" + logInfo);
             console.error(error)

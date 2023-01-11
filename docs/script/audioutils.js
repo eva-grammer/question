@@ -42,7 +42,7 @@ let failAudio = createAudio(
 );
 
 
-function playAudion(audio) {
+async function playAudion(audio) {
 
     if (!audio.isLoad) {
         audio.canPlayThisAudio = false;
@@ -57,49 +57,36 @@ function playAudion(audio) {
         //console.log("["+audio.tryPlayCount+"]start play,but can't be play ,wait a moment:" + logInfo);
 
         if (audio.tryPlayCount > MaxTryPlayCount) {
-           console.log("放弃 try :" + MaxTryPlayCount);
+            console.log("放弃 try :" + MaxTryPlayCount);
             return;
         }
         setTimeout(() => playAudion(audio), 500);
         ;
         return;
     }
-   //  console.log("start play audio.duration:" + audio.duration + audio.canPause);
+    //  console.log("start play audio.duration:" + audio.duration + audio.canPause);
     if (audio.duration) {
         if (audio.canPause) {
             audio.pause();
         }
         audio.currentTime = 0;
     }
-
-    // console.log("start play:" + logInfo);
-
-
-
     audio.canPause = false;
     audio.isLoad = false;
-    setTimeout(() => {
-        let playPromise = audio.play(); 
-        audio.tryPlayCount = 0;
-        if (playPromise !== undefined) {
-            playPromise.then(_ => {
-                audio.canPause = true;
-    
-               //  console.log("start play succecee:" + logInfo);
-            }).catch(error => {
-                console.log("start play error:" + logInfo);
-                console.error(error)
-                let source = temp.errorSource;
-                console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + source + (audio.tag || "") + "]:");
-                stopPlay();
-    
-            });
-        } else {
-            console.log("start play playPromise may be undefined: " + playPromise);
-    
-        }
-    }, 1);
-   
+    audio.tryPlayCount = 0;
+    await audio.play().then(_ => {
+        audio.canPause = true;
+
+        //  console.log("start play succecee:" + logInfo);
+    }).catch(error => {
+        console.log("start play error:" + logInfo);
+        console.error(error)
+        let source = temp.errorSource;
+        console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + source + (audio.tag || "") + "]:");
+        stopPlay();
+
+    });
+
 }
 
 function playAudionWithUrl(url, loop) {

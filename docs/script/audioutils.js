@@ -78,25 +78,28 @@ function playAudion(audio) {
 
     audio.canPause = false;
     audio.isLoad = false;
-    let playPromise = audio.play(); 
-    audio.tryPlayCount = 0;
-    if (playPromise !== undefined) {
-        playPromise.then(_ => {
-            audio.canPause = true;
-
-           //  console.log("start play succecee:" + logInfo);
-        }).catch(error => {
-            console.log("start play error:" + logInfo);
-            console.error(error)
-            let source = temp.errorSource;
-            console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + source + (audio.tag || "") + "]:");
-            stopPlay();
-
-        });
-    } else {
-        console.log("start play playPromise may be undefined: " + playPromise);
-
-    }
+    setTimeout(() => {
+        let playPromise = audio.play(); 
+        audio.tryPlayCount = 0;
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                audio.canPause = true;
+    
+               //  console.log("start play succecee:" + logInfo);
+            }).catch(error => {
+                console.log("start play error:" + logInfo);
+                console.error(error)
+                let source = temp.errorSource;
+                console.error("来自播放音频第" + (audio.errorCount ? audio.errorCount : 0) + "次错误[" + source + (audio.tag || "") + "]:");
+                stopPlay();
+    
+            });
+        } else {
+            console.log("start play playPromise may be undefined: " + playPromise);
+    
+        }
+    }, 1);
+   
 }
 
 function playAudionWithUrl(url, loop) {

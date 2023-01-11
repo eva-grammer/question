@@ -41,7 +41,7 @@ let failAudio = createAudio(
 );
 
 
-async function playAudion(audio) {
+ function playAudion(audio) {
 
     if (!audio.isLoad) {
         audio.canPlayThisAudio = false;
@@ -73,7 +73,7 @@ async function playAudion(audio) {
     audio.canPause = false;
     audio.isLoad = false;
     audio.tryPlayCount = 0;
-    await audio.play().then(_ => {
+     audio.play().then(_ => {
         audio.canPause = true;
 
         //  console.log("start play succecee:" + logInfo);

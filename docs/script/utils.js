@@ -18,7 +18,7 @@ function removeEmpty(array) {
     });
     return newArray;
 }
-console.error = console.log = console.info = function (error) {
+console.error = console.log =console.warn = console.info = function (error) {
     if (errorInfoBox) {
         errorInfoBox.value += error + "\r\n";
     }

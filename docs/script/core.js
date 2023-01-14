@@ -24,7 +24,7 @@ function createDialog(data) {
 function createHtmlContents(contents) {
     let count = article.childElementCount;
     let lastElement = article.children[count - 1];
-    if (lastElement.textContent == ".") {
+    if (lastElement.textContent == "." || lastElement.textContent == "loading...") {
         lastElement.remove();
     }
     contents.forEach((oneContent) => {
@@ -71,7 +71,7 @@ function createOneQuestion(parent, question, isOneWord) {
     if (isOneWord === true) {
         li_result.className = "my-result oneword";
     }
-   
+
     ul.appendChild(li_title);
     ul.appendChild(li_QuestionParent);
     ul.appendChild(li_words);

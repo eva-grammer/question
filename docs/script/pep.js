@@ -24,7 +24,7 @@ function createPEP(result) {
 function createSelectTitleByWord(result) {
     //根据单词 选意思 
     createTest("根据单词 选意思", (wordInfo) => {
-        return createTitleByWord(wordInfo);
+        return createTitleByWord(wordInfo, true);
     },
 
         result.words, "title"
@@ -36,7 +36,7 @@ function createSelectWordByTitle(result) {
     //根据译文 选单词
 
     createTest("根据译文 选单词", (wordInfo) => {
-        return createTitleByYiWen(wordInfo);
+        return createTitleByYiWen(wordInfo,true);
     },
         result.words, "word"
     );
@@ -45,7 +45,7 @@ function createSelectPronuceByWord(result) {
     //根据单词 选音标
 
     createTest("根据单词 选音标", (wordInfo) => {
-        return createTitleByWord(wordInfo);
+        return createTitleByWord(wordInfo, false);
     },
 
         result.words, "eUYinBiao"
@@ -55,7 +55,7 @@ function createSelectPronuceByWord(result) {
 function createSelectPronuceByWordTitle(result) {
     //根据译文 选音标
     createTest("根据译文 选音标", (wordInfo) => {
-        return createTitleByYiWen(wordInfo);
+        return createTitleByYiWen(wordInfo,false);
     },
 
         result.words, "eUYinBiao"
@@ -68,7 +68,7 @@ function createWriteWordByTitle(result) {
     let questions = [];
     result.words.forEach((oneWord) => {
 
-        questions.push({ title: createTitleByYiWen(oneWord), answer: oneWord.word.split('').join(' ') });
+        questions.push({ title: createTitleByYiWen(oneWord,true), answer: oneWord.word.split('').join(' ') });
 
     });
     questions.sort(randomSort);
@@ -104,7 +104,7 @@ function createWriteWordByAudio(result) {
 
 }
 
-function createTitleByYiWen(wordInfo) {
+function createTitleByYiWen(wordInfo, showYinbiao) {
     let wordDiv = document.createElement("div");
     let optsArray = splitChines(wordInfo.title);
     if (optsArray.length == 1) {
@@ -124,17 +124,21 @@ function createTitleByYiWen(wordInfo) {
             wordDiv.appendChild(o);
         });
     }
-    createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, true);
-    createPronounce(wordInfo.word, wordInfo.eUYinBiao, 2, wordDiv, true);
+    if (showYinbiao) {
+        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, true);
+        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 2, wordDiv, true);
+    }
     return wordDiv;
 }
-function createTitleByWord(wordInfo) {
+function createTitleByWord(wordInfo, showYinbiao) {
     let wordDiv = document.createElement("div");
     let wordElement = document.createElement("strong");
     wordElement.textContent = wordInfo.word;
     wordDiv.appendChild(wordElement);
-    createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, true);
-    createPronounce(wordInfo.word, wordInfo.uSAYinBiao, 2, wordDiv, true);
+    if (showYinbiao) {
+        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, true);
+        createPronounce(wordInfo.word, wordInfo.uSAYinBiao, 2, wordDiv, true);
+    }
     return wordDiv;
 }
 function createPronounce(word, yinbiao, typenumber, parentElement, showYinbiao) {
@@ -152,6 +156,7 @@ function createPronounce(word, yinbiao, typenumber, parentElement, showYinbiao) 
 
     parentElement.appendChild(link);
 }
+
 function createTitleByAudio(wordInfo) {
     let wordDiv = document.createElement("div");
     createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, true);
@@ -203,6 +208,7 @@ function createOneTest(getTestTitle, options, correctIndex, attrName) {
     addTotalTestNumber(li_Result);
     return ul;
 }
+
 function createRadioOptions(words, correctAnswerItem, wordindex, attrName) {
 
 
@@ -267,7 +273,7 @@ function createOneRadioOption(words, attrName, exceptNum, isCorrect) {
     let random = getRndInteger(words.length, exceptNum);
     let val = words[random][attrName];
     if (!val) {
-        return  createOneRadioOption(words, attrName, exceptNum, isCorrect);
+        return createOneRadioOption(words, attrName, exceptNum, isCorrect);
     }
     return { opt: val, isCorrect: isCorrect };
 }

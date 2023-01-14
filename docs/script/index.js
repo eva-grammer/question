@@ -1,5 +1,6 @@
 function handleContent(result) {
     removePlaceHolder();
+    createNote();
     if (result.questions) {
 
         createQuestion(result.questions);
@@ -53,7 +54,7 @@ function loadQuestion() {
 window.onload = function () {
     registerStopDoubleTouchEvent();
     window.article = document.getElementsByTagName("article")[0];
-    createNote();
+    
     loadQuestion();
 
 };

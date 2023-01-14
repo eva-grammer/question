@@ -67,7 +67,7 @@ function createOneQuestion(parent, question, isOneWord) {
     let li_action = document.createElement("li");
     li_action.className = "my-action";
     createResetButton(li_action);
-    createPlayLink(li_action, question.originalWords);
+    createPlayLink(li_action, question.originalWords,isOneWord);
 
     let li_result = document.createElement("li");
     li_result.className = "my-result";

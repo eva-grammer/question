@@ -71,7 +71,7 @@ function createNextLink(callback) {
     }
     let allLinks = nav.getElementsByTagName("a");
     if (allLinks.length == 0) {
-        setTimeout(v => createNextLink(), 500);
+        setTimeout(v => createNextLink(callback), 500);
     } else {
         let total = allLinks.length;
         let currentUrl = document.location.href;

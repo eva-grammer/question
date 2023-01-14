@@ -36,7 +36,7 @@ function createSelectWordByTitle(result) {
     //根据译文 选单词
 
     createTest("根据译文 选单词", (wordInfo) => {
-        return createTitleByYiWen(wordInfo,true);
+        return createTitleByYiWen(wordInfo, true);
     },
         result.words, "word"
     );
@@ -55,7 +55,7 @@ function createSelectPronuceByWord(result) {
 function createSelectPronuceByWordTitle(result) {
     //根据译文 选音标
     createTest("根据译文 选音标", (wordInfo) => {
-        return createTitleByYiWen(wordInfo,false);
+        return createTitleByYiWen(wordInfo, false);
     },
 
         result.words, "eUYinBiao"
@@ -68,7 +68,7 @@ function createWriteWordByTitle(result) {
     let questions = [];
     result.words.forEach((oneWord) => {
 
-        questions.push({ title: createTitleByYiWen(oneWord,true), answer: oneWord.word.split('').join(' ') });
+        questions.push({ title: createTitleByYiWen(oneWord, true), answer: oneWord.word.split('').join(' ') });
 
     });
     questions.sort(randomSort);
@@ -124,10 +124,10 @@ function createTitleByYiWen(wordInfo, showYinbiao) {
             wordDiv.appendChild(o);
         });
     }
-    if (showYinbiao) {
-        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, true);
-        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 2, wordDiv, true);
-    }
+
+    createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, showYinbiao);
+    createPronounce(wordInfo.word, wordInfo.eUYinBiao, 2, wordDiv, showYinbiao);
+
     return wordDiv;
 }
 function createTitleByWord(wordInfo, showYinbiao) {
@@ -135,19 +135,19 @@ function createTitleByWord(wordInfo, showYinbiao) {
     let wordElement = document.createElement("strong");
     wordElement.textContent = wordInfo.word;
     wordDiv.appendChild(wordElement);
-    if (showYinbiao) {
-        createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, true);
-        createPronounce(wordInfo.word, wordInfo.uSAYinBiao, 2, wordDiv, true);
-    }
+    createPronounce(wordInfo.word, wordInfo.eUYinBiao, 1, wordDiv, showYinbiao);
+    createPronounce(wordInfo.word, wordInfo.uSAYinBiao, 2, wordDiv, showYinbiao);
+
     return wordDiv;
 }
 function createPronounce(word, yinbiao, typenumber, parentElement, showYinbiao) {
     if (!yinbiao) return;
-    if (showYinbiao) {
-        let pronunceElement1 = document.createElement("span");
-        pronunceElement1.textContent = (typenumber == 1 ? "(英)" : "(美)") + yinbiao;
-        parentElement.appendChild(pronunceElement1);
-    }
+    if (!showYinbiao) { yinbiao = ""; }
+
+    let pronunceElement1 = document.createElement("span");
+    pronunceElement1.textContent = (typenumber == 1 ? "(英)" : "(美)") + yinbiao;
+    parentElement.appendChild(pronunceElement1);
+
     let link = document.createElement("a");
     link.className = "play-link";
     link.href = `https://dict.youdao.com/dictvoice?audio=${word}\&type=${typenumber}`;

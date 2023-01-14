@@ -23,6 +23,7 @@ function createDialog(data) {
 
 function removePlaceHolder() {
     let count = article.childElementCount;
+    if(count<1) return;
     let lastElement = article.children[count - 1];
     if (lastElement.textContent == "." || lastElement.textContent == "loading...") {
         lastElement.remove();

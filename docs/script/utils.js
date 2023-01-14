@@ -18,7 +18,7 @@ function removeEmpty(array) {
     });
     return newArray;
 }
-console.error = console.log =console.warn = console.info = function (error) {
+console.error = console.log = console.warn = console.info = function (error) {
     if (errorInfoBox) {
         errorInfoBox.value += error + "\r\n";
     }
@@ -177,7 +177,7 @@ function doubleClickWord(e) {
     let $button = $(buttonId);
     $button.removeClass("select");
     let parentButton = $button.parent();
-    let parentQuestion =$word.parent();
+    let parentQuestion = $word.parent();
     $word.remove();
     hideButtons(parentQuestion, parentButton);
 
@@ -194,13 +194,19 @@ function hideButtons(li_Question, buttonsParent) {
     }
 }
 
-function createPlayLink(parentElement, words) {
+function createPlayLink(parentElement, words, isOneWord) {
     let link_play = document.createElement("a");
     link_play.textContent = "播放";
     link_play.className = "play-link";
+    let playStr = "";
+    if (isOneWord) {
+        playStr = words.join("");
+    } else {
+        playStr = words.join("+");
+    }
     link_play.href =
         "https://dict.youdao.com/dictvoice?audio=" +
-        words.join("+") +
+        playStr +
         "&le=eng&le=eng&type=2";
     parentElement.appendChild(link_play);
 }

@@ -21,12 +21,15 @@ function createDialog(data) {
     });
 }
 
-function createHtmlContents(contents) {
+function removePlaceHolder() {
     let count = article.childElementCount;
     let lastElement = article.children[count - 1];
     if (lastElement.textContent == "." || lastElement.textContent == "loading...") {
         lastElement.remove();
     }
+}
+function createHtmlContents(contents) {
+
     contents.forEach((oneContent) => {
         createOneHtmlContent(oneContent);
     });

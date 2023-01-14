@@ -1,4 +1,5 @@
 function handleContent(result) {
+    removePlaceHolder();
     if (result.questions) {
 
         createQuestion(result.questions);

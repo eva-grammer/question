@@ -20,15 +20,15 @@ function createAudio(url, audioSrc, loop) {
 }
 let clickAudio = createAudio(
 
-    "https://eva-grammer.github.io/question/media/alert.wav", "点击声效"
+    "https://vod.ruotongmusic.com/sv/371bb841-179ccf90325/371bb841-179ccf90325.wav", "点击声效"
 );
 
 let successAudio = createAudio(
-    "https://eva-grammer.github.io/question/media/success.wav", "成功声效"
+    "https://vod.ruotongmusic.com/sv/28e211ba-179ccca0dfa/28e211ba-179ccca0dfa.wav", "成功声效"
 );
 
 let failAudio = createAudio(
-    "https://eva-grammer.github.io/question/media/error.wav", "错误声效"
+    "https://vod.ruotongmusic.com/sv/5dc38d4-179ccc95e2f/5dc38d4-179ccc95e2f.wav", "错误声效"
 );
 
 

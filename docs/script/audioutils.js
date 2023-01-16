@@ -6,11 +6,13 @@ let MaxTryPlayCount = 10;
 let lastElement = null;
 
 function createAudio(url, audioSrc, loop) {
+    let u = navigator.userAgent;
+    let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; 
     let temp = new Howl({
         src: [url],
         preload: true,
         loop: loop === true,
-        html5: true, // 设置为true 页面将使用原生video 标签渲染 不会导致资源跨域的情况
+        html5: !isAndroid, // 设置为true 页面将使用原生video 标签渲染 不会导致资源跨域的情况
 
     });
     return temp;

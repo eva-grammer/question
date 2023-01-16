@@ -8,6 +8,7 @@ let lastElement = null;
 function createAudio(url, audioSrc, loop) {
     let u = navigator.userAgent;
     let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; 
+    console.log("isAndroid:"+isAndroid)
     let temp = new Howl({
         src: [url],
         preload: true,

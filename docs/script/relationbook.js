@@ -18,8 +18,15 @@ const books = [
     { shortPath: "", name: "" },
     { shortPath: "", name: "" },
 ];
+window.onload = function () {
+  
+    window.article = document.getElementsByTagName("article")[0];
+    
 
+
+};
 function createRelationBookLink() {
+    
     let hr = document.createElement("hr");
     article.appendChild(hr);
     let ul = document.createElement("ul");

@@ -20,10 +20,10 @@ const books = [
 ];
 window.onload = function () {
   
-    window.article = document.getElementsByTagName("article")[0];
-    
-
-
+   
+if(!window.article)
+ window.article = document.getElementsByTagName("article")[0];
+    createRelationBookLink();
 };
 function createRelationBookLink() {
     

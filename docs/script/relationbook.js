@@ -22,7 +22,7 @@ window.onload = function () {
   
    
 if(!window.article)
- window.article = document.getElementsByTagName("article")[0];
+ window.article = document.getElementsByTagName("section")[0];
     createRelationBookLink();
 };
 function createRelationBookLink() {
